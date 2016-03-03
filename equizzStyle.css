@@ -1,4 +1,4 @@
-[class*="col-"], footer {
+[class*="bord-"], footer {
   background-color: lightblue;
   border: 2px solid black;
   border-radius: 6px;
@@ -10,4 +10,21 @@
 	background-color: lightblue;
 	line-height: 40px;
 	text-align:center;
+
+[class*="cel-"]{
+	background-color:lightblue;
+	border-radius: 6px; 
+	text-align:center;
+}
+.button{
+ width:10em;
+ height:10em;
+ 
+}
+.submit{
+	
+	width:20em;
+	height:5em;
+}
+.title{
 }
