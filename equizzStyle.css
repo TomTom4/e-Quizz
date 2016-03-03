@@ -1,4 +1,4 @@
-[class*="bord-"], footer {
+.bordure {
   background-color: lightblue;
   border: 2px solid black;
   border-radius: 6px;
@@ -11,11 +11,13 @@
 	line-height: 40px;
 	text-align:center;
 
-[class*="cel-"]{
+}
+.cel{
 	background-color:lightblue;
 	border-radius: 6px; 
 	text-align:center;
 }
+
 .button{
  width:10em;
  height:10em;
@@ -27,4 +29,8 @@
 	height:5em;
 }
 .title{
+}
+
+body{
+	padding-top:60px;
 }
