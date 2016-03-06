@@ -13,11 +13,6 @@
     margin-bottom:18px;
 }
 
-.page-header{
-	background-color: lightblue;
-	text-align:center;
-}
-
 .cel{
 	background-color:lightblue;
 	border-radius: 6px;
@@ -39,4 +34,8 @@
 
 body{
 	padding-top:36px;
+}
+
+.navbar-default {
+	background-color:lightblue;
 }
