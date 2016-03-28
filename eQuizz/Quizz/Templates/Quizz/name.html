@@ -28,7 +28,7 @@
         <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand" href="/home">
                         <!--<img alt="Brand" src="...">-->
                         e-Quizz
                     </a>
@@ -39,32 +39,8 @@
 
         <div class="jumbotron">
             <div class="container">
-
-                <div class="row">
-                    <div class="col-sm-offset-1 col-sm-4 form-group bordure">
-                        <h2>Access Etudiant</h2>
-                        <form action="{% url 'Quizz.views.name' %}" method="post">
-						{% csrf_token %}
-                            <div class="form-group">
-                                <label class="sr-only" for="code">Code</label>
-                                <div class="input-group">
-                                    <input type="text" id="code" class="form-control" placeholder="Code">
-                                    <span class="input-group-btn">
-                                        <button class="btn btn-primary" type="submit">Valider</button>
-                                    </span>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="col-sm-offset-2 col-sm-4 form-group bordure">
-                        <h2>Créer un quizz</h2>
-                        <form>
-                            <div class="form-group text-center">
-                                <input class="btn btn-primary" type="Submit" Value="Créer un quizz!"><br>
-                            </div>
-                        </form>
-                    </div>
-                </div>
+			
+			</div>
             </div>
 
         </div>
