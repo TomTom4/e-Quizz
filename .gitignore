@@ -1,3 +1,4 @@
 bootstrap/js/
 bootstrap/css/
 bootstrap/fonts/
+*.pyc
