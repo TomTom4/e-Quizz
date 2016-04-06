@@ -16,8 +16,16 @@ def home(request):
 	
 def name(request):
 	
-	code = request.POST['code'];
+	code = request.POST['code']
 	
 
 	return render(request, 'Quizz/name.html', locals())
+	
+def ppl(request):
+	
+	nom = request.POST['name']
+	request.session['name'] = nom
+	name=request.session['name']
+	
+	return render(request, 'Quizz/main.html', locals())
 
