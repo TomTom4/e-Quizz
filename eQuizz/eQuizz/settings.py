@@ -54,7 +54,7 @@ MIDDLEWARE_CLASSES = [
 ROOT_URLCONF = 'eQuizz.urls'
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'templates'),
+    os.path.join(BASE_DIR, 'Quizz/Templates'),
 )
 
 TEMPLATES = [
