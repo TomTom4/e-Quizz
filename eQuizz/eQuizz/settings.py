@@ -53,14 +53,10 @@ MIDDLEWARE_CLASSES = [
 
 ROOT_URLCONF = 'eQuizz.urls'
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'Quizz/Templates'),
-)
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'Templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'Templates'), os.path.join(BASE_DIR, 'Quizz/Templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
