@@ -6,17 +6,18 @@ from Quizz.forms import *
 
 def home(request):
 
-	if request.method == 'POST':
-		form = AccessQuizz(request.POST)
-		if form.is_valid():
+	#if request.method == 'POST':
+		#form = AccessQuizz(request.POST['code'])
+		#if form.is_valid():
 		
-			room=form.cleaned_data['code'];
+			#room=form.cleaned_data['code'];
 		
 	return render(request, 'Quizz/proto.html', locals())
 	
 def name(request):
 	
-	code = request.POST
+	code = request.POST['code'];
+	
 
-	return render(request, 'Quizz/name.html')
+	return render(request, 'Quizz/name.html', locals())
 
