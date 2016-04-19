@@ -22,4 +22,5 @@ urlpatterns = [
 	url(r'^home', views.home),
 	url(r'^name', views.name),
 	url(r'^main', views.ppl),
+	url(r'^prof', views.prof),
 ]

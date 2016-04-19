@@ -12,6 +12,7 @@ class Seance(models.Model):
     #date = models.DateTimeField(auto_now_add=True, auto_now=False, 
     #                            verbose_name="Date de parution")
     id = models.AutoField(primary_key=True)
+    code = models.IntegerField() #check for lengthpython
 
     
     def __str__(self):
