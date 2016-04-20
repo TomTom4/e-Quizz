@@ -11,10 +11,10 @@
         <title>Equiz</title>
 		{% load static %}
         <!-- Bootstrap core CSS -->
-        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+        <link href="./bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
         <!-- Custom styles for this template -->
-        <link href="{% static 'css/equizzStyle.css' %}" rel="stylesheet">
+        <link href="equizzStyle.css" rel="stylesheet">
 
         <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
         <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
@@ -42,7 +42,12 @@
 				<p style="text-align:center">Salle n° {{code}}<br/><br/>Salle du professeur</p>
 								
 				<!-- il faudra remplir ici pour les options du prof!-->
-								
+				<form method ="post" >
+						<input type ="text" name="commentaire" value ="votre commentaire ici"/>
+						<input type ="button" name="qOuverte" value = "lancer une question ouverte"/>
+						<input type ="button" name="qcm" value ="lancer un qcm"/>
+						<input type ="button" name="Fsession" value ="clore la session"/>
+				</form>	
 				<!--{% csrf_token %}
                             <div class="form-group">
                                 <label class="sr-only" for="code">Code</label>
