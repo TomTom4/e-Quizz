@@ -23,4 +23,5 @@ urlpatterns = [
 	url(r'^name', views.name),
 	url(r'^main', views.ppl),
 	url(r'^prof', views.prof),
+	url(r'^error/(?P<id>\d+)', views.error),
 ]

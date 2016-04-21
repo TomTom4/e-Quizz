@@ -1,3 +1,4 @@
+# coding: utf8
 from django.shortcuts import render
 from django.http import HttpResponse, HttpRequest
 from Quizz.forms import *
@@ -15,16 +16,24 @@ def home(request):
 		
 			#room=form.cleaned_data['code'];
 		
-	return render(request, 'Quizz/proto.html', locals())
+	return render(request, 'Quizz/home.html', locals())
 	
 def name(request):
 	
 	code = request.POST['code']
-	querySet=Seance.objects.filter(code=code)
-	if (querySet==[]):
-		return render(request, 'Quizz/proto.html', locals())
-	else:
-		return render(request, 'Quizz/name.html', locals())
+	try:
+		sess=Seance.objects.all()
+		sess=Seance.objects.filter(code=code)
+		if not sess:
+			addr='Quizz/error.html'
+			error="Impossible de trouver cette salle"
+		else:
+			addr='Quizz/name.html'
+			
+	except ValueError:
+		addr='Quizz/error.html'
+		error="Veuillez entrer un numéro de salle"
+	return render(request, addr, locals())
 
 	
 def ppl(request):
@@ -47,5 +56,9 @@ def prof(request):
 	session = Seance(code=code)
 	session.save()
 	
-	return render(request, 'Quizz/prof.html')
+	return render(request, 'Quizz/prof.html', locals())
 
+def error(request, errmsg):
+	if errmsg==1:
+		error="Impossible de trouver cette salle"
+	return render(request, 'Quizz/error.html', locals())

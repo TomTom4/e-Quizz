@@ -39,30 +39,18 @@
 
         <div class="jumbotron">
             <div class="container">
-				<p style="text-align:center">Salle n° {{code}}<br/><br/>Salle du professeur</p>
+				<p style="text-align:center">Une erreur est survenue!<br/><br/>{{error}}</p>
 								
 				<!-- il faudra remplir ici pour les options du prof!-->
-				<div class = "col-lg-6">
-					<form method ="post" >
-						<ul class="list-unstyled">
-							<li>
-								<input type ="text" class="textfieldprof" c name="commentaire" value ="votre commentaire ici"/>
-							</li>
-							<li>
-								<input type ="button"  class="celprof" name="qOuverte" value = "lancer une question ouverte"/>
-							</li>
-							<li>
-								<input type ="button" class="celprof" name="qcm" value ="lancer un qcm"/>
-							</li>
-							<li>
-								<input type ="button" class="celprof"  name="Fsession" value ="clore la session"/>
-							</li>
-						</ul>
-					</form>
-				</div>
+				
 				<!-- placer dans cette deuxieme div les charts -->
-				<div class="col-lg-6">
-					
+				<div class="col-xs-offset-3 col-xs-6">
+					<form action="{% url 'Quizz.views.home' %}" method='post'>
+							{% csrf_token %}
+                            <div class="form-group text-center">
+                                <input class="btn btn-primary" type="Submit" Value="Retour à l'acceuil"><br>
+                            </div>
+                        </form>
 				</div>	
 				<!--{% csrf_token %}
                             <div class="form-group">
@@ -77,19 +65,17 @@
 					
 					
 			</div>
-            </div>
+		</div>
 
-        </div>
-    </div>
 
-    <div class="container">
+    <!--<div class="container">
         <h1>De la communication à double sens en cours avec e-Quizz !</h1>
         <p>
             Suspendisse vitae velit sit amet augue vulputate aliquam non id massa. Duis rutrum id tellus vel tristique. Suspendisse libero turpis, porta nec erat a, convallis aliquet arcu. Fusce accumsan ultricies augue id elementum. Fusce ullamcorper dignissim
             mi vel maximus. Donec tempor, libero in suscipit porttitor, sem neque mollis libero, eu accumsan augue metus id nunc. Sed convallis iaculis eros eget accumsan. Nam tristique libero dui, a tincidunt mauris tempor sed. Sed ipsum velit, euismod vel
             lectus a, rutrum pharetra sem. Sed ullamcorper ipsum orci, a faucibus sem congue sed. Maecenas varius nibh vitae enim rutrum, a posuere odio volutpat.
         </p>
-    </div>
+    </div>-->
 
     <!-- Bootstrap core JavaScript
     ================================================== -->
