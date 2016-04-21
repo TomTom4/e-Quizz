@@ -42,12 +42,28 @@
 				<p style="text-align:center">Salle n° {{code}}<br/><br/>Salle du professeur</p>
 								
 				<!-- il faudra remplir ici pour les options du prof!-->
-				<form method ="post" >
-						<input type ="text" name="commentaire" value ="votre commentaire ici"/>
-						<input type ="button" name="qOuverte" value = "lancer une question ouverte"/>
-						<input type ="button" name="qcm" value ="lancer un qcm"/>
-						<input type ="button" name="Fsession" value ="clore la session"/>
-				</form>	
+				<div class = "col-lg-6">
+					<form method ="post" >
+						<ul class="list-unstyled">
+							<li>
+								<input type ="text" class="textfieldprof" c name="commentaire" value ="votre commentaire ici"/>
+							</li>
+							<li>
+								<input type ="button"  class="celprof" name="qOuverte" value = "lancer une question ouverte"/>
+							</li>
+							<li>
+								<input type ="button" class="celprof" name="qcm" value ="lancer un qcm"/>
+							</li>
+							<li>
+								<input type ="button" class="celprof"  name="Fsession" value ="clore la session"/>
+							</li>
+						</ul>
+					</form>
+				</div>
+				<!-- placer dans cette deuxieme div les charts -->
+				<div class="col-lg-6">
+					
+				</div>	
 				<!--{% csrf_token %}
                             <div class="form-group">
                                 <label class="sr-only" for="code">Code</label>
