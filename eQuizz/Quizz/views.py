@@ -15,7 +15,7 @@ def home(request):
 		#if form.is_valid():
 		
 			#room=form.cleaned_data['code'];
-		
+	#code=0 Pourquoi ne passe pas dans les variables locales?
 	return render(request, 'Quizz/home.html', locals())
 	
 def name(request):
@@ -38,24 +38,58 @@ def name(request):
 	
 def ppl(request):
 	
-	nom = request.POST['name']
-	request.session['name'] = nom
-	name=request.session['name']
-	code = request.code
+	# nom = request.POST['name']
+	# request.session['name'] = nom
+	# name=request.session['name']
+	# code = request.code
 	
-	return render(request, 'Quizz/main.html', locals())
+	code = request.POST['code']
+	try:
+		sess=Seance.objects.all()
+		sess=Seance.objects.filter(code=code)
+		if not sess:
+			addr='Quizz/error.html'
+			error="Impossible de trouver cette salle"
+		else:
+			addr='Quizz/main.html'
+			request.session['code']=code
+			
+	except ValueError:
+		addr='Quizz/error.html'
+		error="Veuillez entrer un numéro de salle"
+		
+	return render(request, addr, locals())
+
 	
 def prof(request):
 
-	code=0
-	for index in range(0,9):
-		numb=random.randint(1, 9)
-		numb=numb*(10**index)
-		code=code+numb
+	try:
+		code=request.code
+		if request.POST['question_type']=="qcm":
+			ask=Question(code=code)
+	except AttributeError: 
+		code=0
+		for index in range(0,9):
+			numb=random.randint(1, 9)
+			numb=numb*(10**index)
+			code=code+numb
 	
-	session = Seance(code=code)
-	session.save()
+		session = Seance(code=code)
+		session.save()
+		request.session['code']=code #Sauvegarde dans la session pour un usage ultérieur
 	
+	# if code == 0:
+		# for index in range(0,9):
+			# numb=random.randint(1, 9)
+			# numb=numb*(10**index)
+			# code=code+numb
+	
+		# session = Seance(code=code)
+		# session.save()
+		# request.session['code']=code
+	# elif request.POST['question_type']=="qcm":
+		# ask=Question(code=code)
+		
 	return render(request, 'Quizz/prof.html', locals())
 
 def error(request, errmsg):

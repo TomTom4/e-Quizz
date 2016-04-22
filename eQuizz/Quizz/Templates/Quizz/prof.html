@@ -43,19 +43,19 @@
 								
 				<!-- il faudra remplir ici pour les options du prof!-->
 				<div class = "col-lg-6">
-					<form method ="post" >
+					<form method ="post" action={% url 'Quizz.views.prof' %}>
 						<ul class="list-unstyled">
 							<li>
-								<input type ="text" class="textfieldprof" c name="commentaire" value ="votre commentaire ici"/>
+								<input type ="text" class="textfieldprof" name="commentaire" value ="votre commentaire ici"/>
 							</li>
 							<li>
-								<input type ="button"  class="celprof" name="qOuverte" value = "lancer une question ouverte"/>
+								<input type ="button"  class="celprof" name="question_type" value = "open"/>
 							</li>
 							<li>
-								<input type ="button" class="celprof" name="qcm" value ="lancer un qcm"/>
+								<input type ="button" class="celprof" name="question_type" value ="qcm"/>
 							</li>
 							<li>
-								<input type ="button" class="celprof"  name="Fsession" value ="clore la session"/>
+								<input type ="button" class="celprof"  name="question_type" value ="close"/>
 							</li>
 						</ul>
 					</form>
