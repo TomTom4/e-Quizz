@@ -11,8 +11,8 @@ class Seance(models.Model):
     #contenu = models.TextField(null=True)
     #date = models.DateTimeField(auto_now_add=True, auto_now=False, 
     #                            verbose_name="Date de parution")
-    id = models.AutoField(primary_key=True)
-    code = models.IntegerField(unique=True) #check for lengthpython
+    id = models.AutoField(primary_key = True)
+    code = models.IntegerField(unique = True) #check for lengthpython
 
     
     def __str__(self):
@@ -24,17 +24,17 @@ class Seance(models.Model):
         return self.id
 
 class Answers(models.Model):
-    answer_id = models.AutoField(primary_key=True)
+    answer_id = models.AutoField(primary_key = True)
     question_id = models.ForeignKey('Question')
-    answer = models.TextField(null=True)
+    answer = models.TextField(null = True)
 
     def __str__(self):
         return self.answer_id
 		
 class Question(models.Model):
-	quesion_id = models.AutoField(primary_key=True)
+	quesion_id = models.AutoField(primary_key = True)
 	code=models.ForeignKey('Seance')
-	
+	commentaire = models.TextField(null = True)
 	def __str__(self):
 		return self.question_id
 

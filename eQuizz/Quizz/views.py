@@ -66,7 +66,23 @@ def prof(request):
 	try:
 		code=request.code
 		if request.POST['question_type']=="qcm":
-			ask=Question(code=code)
+			#creation de ask, une ligne de la table Question 
+			ask = Question(code=code) 
+			if request.POST['commentaire'] !="votre commentaire ici":
+				# ajout d'un commentaire à la question si il y a
+				ask.commentaire = request.POST['commentaire']
+			 
+		elif request.POST['question_type'] == "open_question":
+			#creation de ask, une ligne de la table Question 
+			ask = Question(code=code) 
+			if request.POST['commentaire'] !="votre commentaire ici":
+				# ajout d'un commentaire à la question si il y a
+				ask.commentaire = request.POST['commentaire']
+			else:
+				ask=Question(code=code) 
+		ask.save() 
+		#elif request.POST['question_type'] == "close session":
+
 	except AttributeError: 
 		code=0
 		for index in range(0,9):

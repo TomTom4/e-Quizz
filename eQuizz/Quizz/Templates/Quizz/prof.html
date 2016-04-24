@@ -44,18 +44,19 @@
 				<!-- il faudra remplir ici pour les options du prof!-->
 				<div class = "col-lg-6">
 					<form method ="post" action={% url 'Quizz.views.prof' %}>
+						{% csrf_token %}
 						<ul class="list-unstyled">
 							<li>
 								<input type ="text" class="textfieldprof" name="commentaire" value ="votre commentaire ici"/>
 							</li>
 							<li>
-								<input type ="button"  class="celprof" name="question_type" value = "open"/>
+								<input type ="button"  class="celprof" name="question_type" value = "open_question"/>
 							</li>
 							<li>
 								<input type ="button" class="celprof" name="question_type" value ="qcm"/>
 							</li>
 							<li>
-								<input type ="button" class="celprof"  name="question_type" value ="close"/>
+								<input type ="button" class="celprof"  name="question_type" value ="close session "/>
 							</li>
 						</ul>
 					</form>
