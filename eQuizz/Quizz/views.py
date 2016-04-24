@@ -62,24 +62,25 @@ def ppl(request):
 
 	
 def prof(request):
-
+	#on ne passe jamais à l'interieur du try, on va direct a l'except
 	try:
-		code=request.code
-		if request.POST['question_type']=="qcm":
-			#creation de ask, une ligne de la table Question 
-			ask = Question(code=code) 
-			if request.POST['commentaire'] !="votre commentaire ici":
-				# ajout d'un commentaire à la question si il y a
-				ask.commentaire = request.POST['commentaire']
-			 
-		elif request.POST['question_type'] == "open_question":
-			#creation de ask, une ligne de la table Question 
-			ask = Question(code=code) 
-			if request.POST['commentaire'] !="votre commentaire ici":
-				# ajout d'un commentaire à la question si il y a
-				ask.commentaire = request.POST['commentaire']
-			else:
-				ask=Question(code=code) 
+		if form.is_valid():
+			code=request.code
+			if request.POST['question_type']=="qcm":
+				#creation de ask, une ligne de la table Question 
+				ask = Question(code=code) 
+				if request.POST['commentaire'] !="votre commentaire ici":
+					# ajout d'un commentaire à la question si il y a
+					ask.commentaire = request.POST['commentaire']
+				 
+			elif request.POST['question_type'] == "open_question":
+				#creation de ask, une ligne de la table Question 
+				ask = Question(code=code) 
+				if request.POST['commentaire'] !="votre commentaire ici":
+					# ajout d'un commentaire à la question si il y a
+					ask.commentaire = request.POST['commentaire']
+				else:
+					ask=Question(code=code) 
 		ask.save() 
 		#elif request.POST['question_type'] == "close session":
 
