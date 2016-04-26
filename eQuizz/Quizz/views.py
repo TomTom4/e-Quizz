@@ -19,14 +19,13 @@ def home(request):
 	return render(request, 'Quizz/home.html', locals())
 
 
-def etudiant(request):
+def etudiant(request, code):
 
 	# nom = request.POST['name']
 	# request.session['name'] = nom
 	# name=request.session['name']
 	# code = request.code
 
-	code = request.POST['code']
 	try:
 		sess=Seance.objects.all()
 		sess=Seance.objects.filter(code=code)
