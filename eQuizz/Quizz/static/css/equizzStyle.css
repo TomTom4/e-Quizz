@@ -89,6 +89,13 @@ body{
   background-image: url('/static/images/d.svg');
 }
 
+#question-qcm.hidden {
+  display: block!important;
+}
+#question-qcm.hidden .reponse {
+  transform: scale(0);
+}
+
 #question-qcm .titre {
   background-color: #EAEAEA;
   padding: 12px;

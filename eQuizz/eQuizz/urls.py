@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 	url(r'^$', views.home),
 	url(r'^etudiant/(.*)', views.etudiant),
+    url(r'^etudiant_refresh/(.*)', views.etudiant_refresh),
 	url(r'^prof', views.prof),
 	url(r'^error/(?P<id>\d+)', views.error),
 ]

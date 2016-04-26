@@ -40,4 +40,4 @@ class Question(models.Model):
 	question_type = models.CharField(max_length=3, choices=QUESTION_TYPE, default=QCM)
 
 	def __str__(self):
-		return self.question_id
+		return str(self.id)

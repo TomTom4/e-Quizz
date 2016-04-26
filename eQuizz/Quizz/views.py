@@ -1,6 +1,6 @@
 # coding: utf8
 from django.shortcuts import render, redirect
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from Quizz.forms import *
 import random
 from Quizz.models import *
@@ -27,7 +27,6 @@ def etudiant(request, code):
 	# code = request.code
 
 	try:
-		sess=Seance.objects.all()
 		sess=Seance.objects.filter(code=code)
 		if not sess:
 			addr='Quizz/error.html'
@@ -42,6 +41,23 @@ def etudiant(request, code):
 
 	return render(request, addr, locals())
 
+def etudiant_refresh(request, code):
+	try:
+		sess=Seance.objects.filter(code=code)
+	except ValueError:
+		return error_json(ERR_CODE_INVALIDE)
+	if not sess:
+		return error_json(ERR_SALLE_INTROUVABLE)
+
+	question = Question.objects.filter(seance = sess).order_by('id').last()
+	if not question:
+		return JsonResponse({})
+
+	return JsonResponse({
+		'id':question.id,
+		'question_type':question.question_type,
+	})
+
 
 def prof(request):
 	addr = 'Quizz/prof.html'
@@ -51,7 +67,7 @@ def prof(request):
 			numb=random.randint(1, 9)
 			numb=numb*(10**index)
 			code=code+numb
-	
+
 		session = Seance(code=code)
 		session.save()
 		request.session['code']=code #Sauvegarde dans la session pour un usage ultérieur
@@ -59,28 +75,42 @@ def prof(request):
 		code=request.session['code']
 		if 'question_type' in request.POST:
 			if request.POST['question_type']=="qcm":
-				#creation de ask, une ligne de la table Question 
-				ask = Question(seance=Seance.objects.get(code=code), question_type="QCM") 
+				#creation de ask, une ligne de la table Question
+				ask = Question(seance=Seance.objects.get(code=code), question_type="QCM")
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
 				ask.commentaire = request.POST['commentaire']
 				ask.save()
-				 
+
 			elif request.POST['question_type'] == "open":
-				#creation de ask, une ligne de la table Question 
-				ask = Question(seance=Seance.objects.get(code=code), question_type="Open") 
+				#creation de ask, une ligne de la table Question
+				ask = Question(seance=Seance.objects.get(code=code), question_type="Open")
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
 				ask.commentaire = request.POST['commentaire']
 				ask.save()
-			
+
 			elif request.POST['question_type'] == "close":
 				request.session.flush()
 				return redirect('/')
 
 	return render(request, addr, locals())
 
+
+ERR_SALLE_INTROUVABLE = 1
+ERR_CODE_INVALIDE = 2
+
+def error_message(errmsg):
+	if errmsg == ERR_SALLE_INTROUVABLE:
+		error = "Impossible de trouver cette salle"
+	if errmsg == ERR_CODE_INVALIDE:
+		error = "Veuillez entrer un numéro de salle valide."
+	return error
+
 def error(request, errmsg):
-	if errmsg==1:
-		error="Impossible de trouver cette salle"
+	error = error_message(errmsg)
 	return render(request, 'Quizz/error.html', locals())
+
+def error_json(errmsg):
+	error = error_message(errmsg)
+	return JsonResponse({'error':error_message(errmsg)})
