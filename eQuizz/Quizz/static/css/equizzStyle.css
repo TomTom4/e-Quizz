@@ -48,7 +48,7 @@ body{
 }
 
 .navbar-default {
-	background-color:lightblue;
+	background-color:#7DC3FF;
 }
 
 body#page-etudiant {
@@ -57,6 +57,28 @@ body#page-etudiant {
 
 #question-qcm .reponse {
   display: inline-block;
-  width: 49%
-
+  width: 200px;
+  height: 200px;
+  max-width: 40%;
+  max-height: 40vh;
+  margin: 10px;
+  font-size: 0;
+  background-position: center;
+  background-size: cover;
+  transition: transform 0.4s;
+}
+#question-qcm .reponse:hover {
+  transform: scale(1.1);
+}
+#question-qcm .reponse.a {
+  background-image: url('/static/images/a.svg');
+}
+#question-qcm .reponse.b {
+  background-image: url('/static/images/b.svg');
+}
+#question-qcm .reponse.c {
+  background-image: url('/static/images/c.svg');
+}
+#question-qcm .reponse.d {
+  background-image: url('/static/images/d.svg');
 }
