@@ -12,7 +12,7 @@ class Seance(models.Model):
     #contenu = models.TextField(null=True)
     #date = models.DateTimeField(auto_now_add=True, auto_now=False,
     #                            verbose_name="Date de parution")
-    id = models.AutoField(primary_key = True)
+    id = models.AutoField(primary_key = True) # inutile, généré automatiquement
     code = models.IntegerField(unique = True) #check for lengthpython
 
 
