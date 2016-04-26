@@ -20,7 +20,7 @@
 }
 .celprof{
     background-color: rgb(8,98,149);
-    width: auto;  
+    width: auto;
     border-radius: 6px;
     text-align:center;
     color: rgb(255,255,255);
@@ -49,4 +49,14 @@ body{
 
 .navbar-default {
 	background-color:lightblue;
+}
+
+body#page-etudiant {
+  height:100vh;
+}
+
+#question-qcm .reponse {
+  display: inline-block;
+  width: 49%
+
 }

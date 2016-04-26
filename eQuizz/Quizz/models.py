@@ -22,7 +22,7 @@ class Seance(models.Model):
 """Une réponse correspond à un choix A, B, C ou D d'un élève à un question."""
 class Answers(models.Model):
     question = models.ForeignKey('Question')
-    answer = models.PositiveSmallIntegerField()
+    answer = models.PositiveSmallIntegerField() # 0 => A | 1 => B | 2 => C...
 
     def __str__(self):
         return self.answer_id

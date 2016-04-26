@@ -19,8 +19,7 @@ from Quizz import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-	url(r'^home', views.home),
-	url(r'^name', views.name),
+	url(r'^$', views.home),
 	url(r'^main', views.ppl),
 	url(r'^prof', views.prof),
 	url(r'^error/(?P<id>\d+)', views.error),
