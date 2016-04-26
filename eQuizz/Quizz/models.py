@@ -29,8 +29,15 @@ class Answers(models.Model):
 
 """Une question appartient à une séance. Elle va posséder plusieurs réponses."""
 class Question(models.Model):
+	QCM = 'QCM'
+	OPEN = 'OPE'
+	QUESTION_TYPE = (
+		(QCM, 'QCM'),
+		(OPEN, 'Open'),
+	)
 	seance = models.ForeignKey('Seance')
 	commentaire = models.TextField(null = True)
+	question_type = models.CharField(max_length=3, choices=QUESTION_TYPE, default=QCM)
 
 	def __str__(self):
 		return self.question_id
