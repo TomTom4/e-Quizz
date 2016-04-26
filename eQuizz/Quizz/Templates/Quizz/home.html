@@ -43,7 +43,7 @@
                 <div class="row">
                     <div class="col-sm-offset-1 col-sm-4 form-group bordure">
                         <h2>Access Etudiant</h2>
-                        <form action="{% url 'Quizz.views.ppl' %}" method="post">
+                        <form action="{% url 'Quizz.views.etudiant' %}" method="post">
 						{% csrf_token %}
                             <div class="form-group">
                                 <label class="sr-only" for="code">Code</label>

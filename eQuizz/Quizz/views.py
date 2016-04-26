@@ -19,7 +19,7 @@ def home(request):
 	return render(request, 'Quizz/home.html', locals())
 
 
-def ppl(request):
+def etudiant(request):
 
 	# nom = request.POST['name']
 	# request.session['name'] = nom
