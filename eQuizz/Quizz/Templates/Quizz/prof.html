@@ -19,7 +19,7 @@
         <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
         <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
         <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
-
+		
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]> <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script> <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script> <![endif]-->
     </head>
@@ -47,16 +47,16 @@
 						{% csrf_token %}
 						<ul class="list-unstyled">
 							<li>
-								<input type ="text" class="textfieldprof" name="commentaire" value ="votre commentaire ici"/>
+								<input type ="text" id="comment" class="textfieldprof" name="commentaire" placeholder ="Votre commentaire ici"/>
 							</li>
 							<li>
-								<input type ="submit"  class="celprof" name="question_type" value = "open_question"/>
+								<button type ="submit" id="open" class="celprof" name="question_type" value = "open">Débuter une question ouverte</input>
 							</li>
 							<li>
-								<input type ="submit" class="celprof" name="question_type" value ="qcm"/>
+								<button type ="submit" id="qcm" class="celprof" name="question_type" value ="qcm">Débuter un QCM</input>
 							</li>
 							<li>
-								<input type ="submit" class="celprof"  name="question_type" value ="close session "/>
+								<button type ="submit" id="close" class="celprof"  name="question_type" value ="close">Terminer la session</input>
 							</li>
 						</ul>
 					</form>
@@ -99,5 +99,6 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
     <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
+	
 </body>
 </html>

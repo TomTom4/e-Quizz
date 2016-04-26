@@ -1,5 +1,5 @@
 # coding: utf8
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest
 from Quizz.forms import *
 import random
@@ -44,52 +44,41 @@ def etudiant(request, code):
 
 
 def prof(request):
-	#on ne passe jamais à l'interieur du try, on va direct a l'except
-	try:
-		if form.is_valid():
-			code=request.code
-			if request.POST['question_type']=="qcm":
-				#creation de ask, une ligne de la table Question
-				ask = Question(seance=code)
-				if request.POST['commentaire'] !="votre commentaire ici":
-					# ajout d'un commentaire à la question si il y a
-					ask.commentaire = request.POST['commentaire']
-
-			elif request.POST['question_type'] == "open_question":
-				#creation de ask, une ligne de la table Question
-				ask = Question(seance=code)
-				if request.POST['commentaire'] !="votre commentaire ici":
-					# ajout d'un commentaire à la question si il y a
-					ask.commentaire = request.POST['commentaire']
-				else:
-					ask=Question(seance=code)
-		ask.save()
-		#elif request.POST['question_type'] == "close session":
-
-	except AttributeError:
+	addr = 'Quizz/prof.html'
+	if 'code' not in request.session:
 		code=0
 		for index in range(0,9):
 			numb=random.randint(1, 9)
 			numb=numb*(10**index)
 			code=code+numb
-
+	
 		session = Seance(code=code)
 		session.save()
 		request.session['code']=code #Sauvegarde dans la session pour un usage ultérieur
+	else:
+		code=request.session['code']
+		if 'question_type' in request.POST:
+			if request.POST['question_type']=="qcm":
+				#creation de ask, une ligne de la table Question 
+				ask = Question(seance=Seance.objects.get(code=code), question_type="QCM") 
+				# if request.POST['commentaire'] !="votre commentaire ici":
+					# ajout d'un commentaire à la question si il y a
+				ask.commentaire = request.POST['commentaire']
+				ask.save()
+				 
+			elif request.POST['question_type'] == "open":
+				#creation de ask, une ligne de la table Question 
+				ask = Question(seance=Seance.objects.get(code=code), question_type="Open") 
+				# if request.POST['commentaire'] !="votre commentaire ici":
+					# ajout d'un commentaire à la question si il y a
+				ask.commentaire = request.POST['commentaire']
+				ask.save()
+			
+			elif request.POST['question_type'] == "close":
+				request.session.flush()
+				return redirect('/')
 
-	# if code == 0:
-		# for index in range(0,9):
-			# numb=random.randint(1, 9)
-			# numb=numb*(10**index)
-			# code=code+numb
-
-		# session = Seance(code=code)
-		# session.save()
-		# request.session['code']=code
-	# elif request.POST['question_type']=="qcm":
-		# ask=Question(code=code)
-
-	return render(request, 'Quizz/prof.html', locals())
+	return render(request, addr, locals())
 
 def error(request, errmsg):
 	if errmsg==1:
