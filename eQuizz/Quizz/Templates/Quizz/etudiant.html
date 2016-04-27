@@ -42,10 +42,19 @@
 
   <div id="question-qcm" class="hidden">
     <!--<div class="titre">Question n°<span class="numero">0</span></div>-->
-    <div class="reponse a">A</div>
-    <div class="reponse b">B</div>
-    <div class="reponse c">C</div>
-    <div class="reponse d">D</div>
+    <div class="reponse a" data-valeur="0">A</div>
+    <div class="reponse b" data-valeur="1">B</div>
+    <div class="reponse c" data-valeur="2">C</div>
+    <div class="reponse d" data-valeur="3">D</div>
+
+    <div class="hidden">
+      <form action="/etudiant_post" method="post">
+        {% csrf_token %}
+        <input type="text" name="question_type" value="qcm"/>
+        <input type="text" name="valeur"/>
+        <input type="text" name="id"/>
+      </form>
+    </div>
   </div>
 
   <div id="rien-en-cours">
@@ -62,6 +71,7 @@
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="{% static 'js/bootstrap.min.js' %}"></script><script src="{% static 'js/chart.js' %}"></script>
+  <script src="http://malsup.github.com/jquery.form.js"></script>
   <script src="{% static 'js/quizz.js' %}"></script>
   <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>

@@ -49,7 +49,7 @@ def etudiant_refresh(request, code):
 	if not seance:
 		return error_json(ERR_SALLE_INTROUVABLE)
 
-	question = Question.objects.filter(seance = seance).order_by('id').last()
+	question = Question.objects.filter(seance=seance).latest('id')
 	if not question:
 		return JsonResponse({})
 
@@ -59,6 +59,15 @@ def etudiant_refresh(request, code):
 		'numero':question.numero,
 	})
 
+def etudiant_post(request):
+	if 'question_type' in request.POST:
+		if request.POST['question_type']=="qcm":
+			question = Question.objects.get(id=request.POST['id'])
+			reponse = Reponse(question=question)
+			valeur = request.POST['valeur']
+			reponse.valeur = valeur
+			reponse.save()
+	return JsonResponse({'success':1})
 
 def prof(request):
 	addr = 'Quizz/prof.html'

@@ -16,12 +16,13 @@ $(function() {
           }
           else if (res.question_type == "QCM" && res.numero > window.question_numero) {
             window.question_numero = res.numero;
+            $("input[name=id]").val(res.id);
             $(".numero").text(res.numero);
             $("#question-qcm").removeClass('hidden');
             $("#rien-en-cours").addClass('hidden');
           }
 
-          setTimeout(window.refresh_etudiant, 2000);
+          setTimeout(window.refresh_etudiant, 10000);
         });
       };
       window.refresh_etudiant();
@@ -29,6 +30,8 @@ $(function() {
       $(".reponse").click(function() {
         $("#question-qcm").addClass('hidden');
         $("#rien-en-cours").removeClass('hidden');
+        $("input[name=valeur]").val($(this).attr('data-valeur'));
+        $("#question-qcm form").ajaxSubmit();
       });
     }
 
