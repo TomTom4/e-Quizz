@@ -8,24 +8,24 @@ from django.db import models
 Elle est crée par l'enseignant.
 Elle contient plusieurs questions."""
 class Seance(models.Model):
-    #titre = models.CharField(max_length=100)
-    #contenu = models.TextField(null=True)
-    #date = models.DateTimeField(auto_now_add=True, auto_now=False,
-    #                            verbose_name="Date de parution")
-    id = models.AutoField(primary_key = True) # inutile, généré automatiquement
-    code = models.IntegerField(unique = True) #check for lengthpython
+	#titre = models.CharField(max_length=100)
+	#contenu = models.TextField(null=True)
+	#date = models.DateTimeField(auto_now_add=True, auto_now=False,
+	#							verbose_name="Date de parution")
+	id = models.AutoField(primary_key = True) # inutile, généré automatiquement
+	code = models.IntegerField(unique = True) #check for lengthpython
 
 
-    def __str__(self):
-        return self.id
+	def __str__(self):
+		return self.id
 
 """Une réponse correspond à un choix A, B, C ou D d'un élève à un question."""
 class Answers(models.Model):
-    question = models.ForeignKey('Question')
-    answer = models.PositiveSmallIntegerField() # 0 => A | 1 => B | 2 => C...
+	question = models.ForeignKey('Question')
+	answer = models.PositiveSmallIntegerField() # 0 => A | 1 => B | 2 => C...
 
-    def __str__(self):
-        return self.answer_id
+	def __str__(self):
+		return self.answer_id
 
 """Une question appartient à une séance. Elle va posséder plusieurs réponses."""
 class Question(models.Model):
@@ -36,6 +36,7 @@ class Question(models.Model):
 		(OPEN, 'Open'),
 	)
 	seance = models.ForeignKey('Seance')
+	numero = models.PositiveSmallIntegerField()
 	commentaire = models.TextField(null = True)
 	question_type = models.CharField(max_length=3, choices=QUESTION_TYPE, default=QCM)
 

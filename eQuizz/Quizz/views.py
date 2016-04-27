@@ -43,19 +43,20 @@ def etudiant(request, code):
 
 def etudiant_refresh(request, code):
 	try:
-		sess=Seance.objects.filter(code=code)
+		seance = Seance.objects.filter(code=code)
 	except ValueError:
 		return error_json(ERR_CODE_INVALIDE)
-	if not sess:
+	if not seance:
 		return error_json(ERR_SALLE_INTROUVABLE)
 
-	question = Question.objects.filter(seance = sess).order_by('id').last()
+	question = Question.objects.filter(seance = seance).order_by('id').last()
 	if not question:
 		return JsonResponse({})
 
 	return JsonResponse({
 		'id':question.id,
 		'question_type':question.question_type,
+		'numero':question.numero,
 	})
 
 
@@ -76,7 +77,9 @@ def prof(request):
 		if 'question_type' in request.POST:
 			if request.POST['question_type']=="qcm":
 				#creation de ask, une ligne de la table Question
-				ask = Question(seance=Seance.objects.get(code=code), question_type="QCM")
+				seance = Seance.objects.get(code=code)
+				ask = Question(seance=seance, question_type="QCM")
+				ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
 				ask.commentaire = request.POST['commentaire']
@@ -84,7 +87,9 @@ def prof(request):
 
 			elif request.POST['question_type'] == "open":
 				#creation de ask, une ligne de la table Question
-				ask = Question(seance=Seance.objects.get(code=code), question_type="Open")
+				seance = Seance.objects.get(code=code)
+				ask = Question(seance=seance, question_type="Open")
+				ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
 				ask.commentaire = request.POST['commentaire']
