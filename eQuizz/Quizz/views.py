@@ -88,7 +88,11 @@ def prof(request):
 				#creation de ask, une ligne de la table Question
 				seance = Seance.objects.get(code=code)
 				ask = Question(seance=seance, question_type="QCM")
-				ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
+				check = Question.objects.filter(seance=seance)
+				if not check:
+					ask.numero = 1
+				else:
+					ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
 				ask.commentaire = request.POST['commentaire']
