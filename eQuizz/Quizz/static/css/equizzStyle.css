@@ -50,11 +50,18 @@ body{
 .navbar-default {
 	background-color:#7DC3FF;
 }
+.navbar-inverse {
+  background-color: #286090;
+  border-color: white;
+}
+.navbar-inverse .navbar-brand, .navbar-inverse .navbar-text {
+  color:white;
+}
 
 /* page etudiant */
 
 
-#question-qcm {
+.question-qcm.bloc {
   position:absolute;
   top:50px;
   left:0;
@@ -62,7 +69,7 @@ body{
   right:0;
   font-size: 0;
 }
-#question-qcm .reponse {
+.question-qcm.bloc .reponse {
   display: inline-block;
   height: 50%;
   width: 50%;
@@ -73,30 +80,30 @@ body{
   background-size: cover;
   transition: transform 0.4s;
 }
-#question-qcm .reponse:hover {
+.question-qcm.bloc .reponse:hover {
   transform: scale(0.9);
 }
-#question-qcm .reponse.a {
+.question-qcm.bloc .reponse.a {
   background-image: url('/static/images/a.svg');
 }
-#question-qcm .reponse.b {
+.question-qcm.bloc .reponse.b {
   background-image: url('/static/images/b.svg');
 }
-#question-qcm .reponse.c {
+.question-qcm.bloc .reponse.c {
   background-image: url('/static/images/c.svg');
 }
-#question-qcm .reponse.d {
+.question-qcm.bloc .reponse.d {
   background-image: url('/static/images/d.svg');
 }
 
-#question-qcm.hidden {
+.question-qcm.bloc.hidden {
   display: block!important;
 }
-#question-qcm.hidden .reponse {
+.question-qcm.bloc.hidden .reponse {
   transform: scale(0);
 }
 
-#question-qcm .titre {
+.question-qcm.bloc .titre {
   background-color: #EAEAEA;
   padding: 12px;
   font-size: 20px;

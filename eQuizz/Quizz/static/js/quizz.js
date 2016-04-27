@@ -18,7 +18,7 @@ $(function() {
             window.question_numero = res.numero;
             $("input[name=id]").val(res.id);
             $(".numero").text(res.numero);
-            $("#question-qcm").removeClass('hidden');
+            $(".question-qcm").removeClass('hidden');
             $("#rien-en-cours").addClass('hidden');
           }
 
@@ -28,10 +28,10 @@ $(function() {
       window.refresh_etudiant();
 
       $(".reponse").click(function() {
-        $("#question-qcm").addClass('hidden');
+        $(".question-qcm").addClass('hidden');
         $("#rien-en-cours").removeClass('hidden');
         $("input[name=valeur]").val($(this).attr('data-valeur'));
-        $("#question-qcm form").ajaxSubmit();
+        $(".question-qcm form").ajaxSubmit();
       });
     }
 
