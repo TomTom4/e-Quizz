@@ -20,7 +20,17 @@ $(function() {
             $(".numero").text(res.numero);
             $(".question-qcm").removeClass('hidden');
             $("#rien-en-cours").addClass('hidden');
+			$(".question-open").addClass('hidden');
           }
+		  //Expérimental par Thomas
+		  else if (res.question_type== "Open" && res.numero > window.question_numero) {
+			window.question_numero = res.numero;
+			$("input[name=id]").val(res.id);
+            $(".numero").text(res.numero);
+			$(".question-open").removeClass('hidden');
+			$(".question-qcm").addClass('hidden');
+            $("#rien-en-cours").addClass('hidden');
+		  }
 
           setTimeout(window.refresh_etudiant, 10000);
         });
@@ -29,10 +39,21 @@ $(function() {
 
       $(".reponse").click(function() {
         $(".question-qcm").addClass('hidden');
+		$(".question-open").addClass('hidden');
         $("#rien-en-cours").removeClass('hidden');
-        $("input[name=valeur]").val($(this).attr('data-valeur'));
+		$("input[name=valeur]").val($(this).attr('data-valeur'));
         $(".question-qcm form").ajaxSubmit();
       });
+	  
+	  
+	  $(".open-submit").click(function() {
+        $(".question-qcm").addClass('hidden');
+		$(".question-open").addClass('hidden');
+        $("#rien-en-cours").removeClass('hidden');
+		//$("input[name=valeur]").val($(this).attr('data-valeur'));
+        //(".question-qcm form").ajaxSubmit();
+      });
+	  
     }
 
 });

@@ -63,9 +63,15 @@ def etudiant_post(request):
 	if 'question_type' in request.POST:
 		if request.POST['question_type']=="qcm":
 			question = Question.objects.get(id=request.POST['id'])
-			reponse = Reponse(question=question)
+			reponse = Reponse_QCM(question=question)
 			valeur = request.POST['valeur']
 			reponse.valeur = valeur
+			reponse.save()
+		elif request.POST['question_type']=="open":
+			question = Question.objects.get(id=request.POST['id'])
+			reponse = Reponse_OPEN(question=question)
+			text = request.POST['valeur']
+			reponse.text = text
 			reponse.save()
 	return JsonResponse({'success':1})
 
@@ -102,7 +108,11 @@ def prof(request):
 				#creation de ask, une ligne de la table Question
 				seance = Seance.objects.get(code=code)
 				ask = Question(seance=seance, question_type="Open")
-				ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
+				check = Question.objects.filter(seance=seance)
+				if not check:
+					ask.numero = 1
+				else:
+					ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
 				ask.commentaire = request.POST['commentaire']

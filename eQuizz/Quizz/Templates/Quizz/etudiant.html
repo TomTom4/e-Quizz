@@ -24,8 +24,22 @@
   </div>
 </div>
 
+<div class="question-open bloc hidden">
+  <!--<div class="titre">Question n°<span class="numero">0</span></div>-->
+  <div class="question ouverte">
+    <form action="/etudiant_post" method="post">
+      {% csrf_token %}
+      <input type="hidden" name="question_type" value="open"/>
+      <input type="text" name="valeur"/>
+      <input type="hidden" name="id"/>
+	  <input type="submit" class="open-submit" name="submit" value="Répondre"/>
+    </form>
+  </div>
+</div>
+
 <div id="rien-en-cours">
   <p>Pas de question en cours ! Bonne sieste.</p>
+  <!-- Ajouter ici le +/- -->
 </div>
 
 <script>

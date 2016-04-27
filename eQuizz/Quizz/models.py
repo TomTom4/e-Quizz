@@ -20,9 +20,16 @@ class Seance(models.Model):
 		return self.id
 
 """Une réponse correspond à un choix A, B, C ou D d'un élève à un question."""
-class Reponse(models.Model):
+class Reponse_QCM(models.Model):
 	question = models.ForeignKey('Question')
 	valeur = models.PositiveSmallIntegerField() # 0 => A | 1 => B | 2 => C...
+
+	def __str__(self):
+		return self.answer_id
+		
+class Reponse_OPEN(models.Model):
+	question = models.ForeignKey('Question')
+	text = models.CharField(max_length=100)
 
 	def __str__(self):
 		return self.answer_id
