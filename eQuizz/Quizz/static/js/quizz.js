@@ -51,7 +51,7 @@ $(function() {
 		$(".question-open").addClass('hidden');
         $("#rien-en-cours").removeClass('hidden');
 		//$("input[name=valeur]").val($(this).attr('data-valeur'));
-        //(".question-qcm form").ajaxSubmit();
+        $(".question-open form").ajaxSubmit();
       });
 	  
     }

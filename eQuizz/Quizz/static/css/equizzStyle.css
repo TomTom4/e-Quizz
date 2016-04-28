@@ -98,6 +98,8 @@ body{
 
 .question-qcm.bloc.hidden {
   display: block!important;
+  height: 0%;
+  width: 0%;
 }
 .question-qcm.bloc.hidden .reponse {
   transform: scale(0);
