@@ -71,6 +71,7 @@ def etudiant_refresh(request, code):
 			'id':question.id,
 			'question_type':question.question_type,
 			'numero':question.numero,
+			'commentaire':question.commentaire,
 		})
 	else:
 		return JsonResponse({})
@@ -86,7 +87,7 @@ def etudiant_post(request):
 		elif request.POST['question_type']=="open":
 			question = Question.objects.get(id=request.POST['id'])
 			reponse = Reponse_OPEN(question=question, id_etudiant=request.session['id_student'])
-			text = request.POST['valeur']
+			text = request.POST['texte']
 			reponse.text = text
 			reponse.save()
 	return JsonResponse({'success':1})
