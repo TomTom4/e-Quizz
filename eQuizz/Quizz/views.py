@@ -34,6 +34,14 @@ def etudiant(request, code):
 		else:
 			addr='Quizz/etudiant.html'
 			request.session['code']=code
+			if 'id_student' not in request.session:
+				id=0
+				for index in range(0,9):
+					numb=random.randint(1, 9)
+					numb=numb*(10**index)
+					id=id+numb
+
+				request.session['id_student']=id #Création d'un id étudiant/session
 
 	except ValueError:
 		addr='Quizz/error.html'
@@ -50,26 +58,34 @@ def etudiant_refresh(request, code):
 		return error_json(ERR_SALLE_INTROUVABLE)
 
 	question = Question.objects.filter(seance=seance).latest('id')
+	if question.question_type=="QCM":
+		deja_repondu=Reponse_QCM.objects.filter(question=question, id_etudiant=request.session['id_student'])
+	elif question.question_type=="Open":
+		deja_repondu=Reponse_OPEN.objects.filter(question=question, id_etudiant=request.session['id_student'])
+	
 	if not question:
 		return JsonResponse({})
-
-	return JsonResponse({
-		'id':question.id,
-		'question_type':question.question_type,
-		'numero':question.numero,
-	})
+		
+	if not deja_repondu:
+		return JsonResponse({
+			'id':question.id,
+			'question_type':question.question_type,
+			'numero':question.numero,
+		})
+	else:
+		return JsonResponse({})
 
 def etudiant_post(request):
 	if 'question_type' in request.POST:
 		if request.POST['question_type']=="qcm":
 			question = Question.objects.get(id=request.POST['id'])
-			reponse = Reponse_QCM(question=question)
+			reponse = Reponse_QCM(question=question, id_etudiant=request.session['id_student'])
 			valeur = request.POST['valeur']
 			reponse.valeur = valeur
 			reponse.save()
 		elif request.POST['question_type']=="open":
 			question = Question.objects.get(id=request.POST['id'])
-			reponse = Reponse_OPEN(question=question)
+			reponse = Reponse_OPEN(question=question, id_etudiant=request.session['id_student'])
 			text = request.POST['valeur']
 			reponse.text = text
 			reponse.save()
@@ -124,7 +140,10 @@ def prof(request):
 
 	return render(request, addr, locals())
 
-
+def logout(request):
+	request.session.flush()
+	return redirect('/')
+	
 ERR_SALLE_INTROUVABLE = 1
 ERR_CODE_INVALIDE = 2
 

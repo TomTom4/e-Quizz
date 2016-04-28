@@ -23,6 +23,7 @@ class Seance(models.Model):
 class Reponse_QCM(models.Model):
 	question = models.ForeignKey('Question')
 	valeur = models.PositiveSmallIntegerField() # 0 => A | 1 => B | 2 => C...
+	id_etudiant = models.IntegerField()
 
 	def __str__(self):
 		return self.answer_id
@@ -30,6 +31,7 @@ class Reponse_QCM(models.Model):
 class Reponse_OPEN(models.Model):
 	question = models.ForeignKey('Question')
 	text = models.CharField(max_length=100)
+	id_etudiant = models.IntegerField()
 
 	def __str__(self):
 		return self.answer_id

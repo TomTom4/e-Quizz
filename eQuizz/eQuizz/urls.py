@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^etudiant_post', views.etudiant_post),
 	url(r'^prof', views.prof),
 	url(r'^error/(?P<id>\d+)', views.error),
+	url(r'^logout/', views.logout),
 ]

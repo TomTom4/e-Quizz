@@ -35,7 +35,11 @@
         </a>
         {% block navbar %}{% endblock %}
       </div>
-      <!--<p class="navbar-text navbar-right">Projet tut</p>-->
+	  <div class="navbar-collapse collapse">
+		<div class="nav navbar-text navbar-right">
+			{% block right-nav %}{% endblock %}
+		</div>
+	  </div>
     </div>
   </nav>
 
