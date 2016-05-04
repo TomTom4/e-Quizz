@@ -49,6 +49,34 @@ def etudiant(request, code):
 
 	return render(request, addr, locals())
 
+def prof_refresh(request, code, question_id):
+	try:
+		seance=Seance.objects.filter(code=code)
+	except ValueError:
+		return error_json(ERR_CODE_INVALIDE)
+	if not seance:
+		return error_json(ERR_SALLE_INTROUVABLE)
+		
+	#On récupère les question correspondant à une séance et un id donné
+	question = Question.objects.filter(seance=seance, id=question_id)
+	if question.question_type=="QCM":
+		#On récupère les réponses à une question donnée
+		#answers=Reponse_QCM.objects.filter(question=question)
+		for ans in range(0,3):
+			compte[ans]=Reponse_QCM.objects.filter(question=question, valeur=ans).count()
+	#elif question.question_type=="Open":
+	
+	if not question:
+		return JsonResponse({})
+	
+	return JsonResponse({
+		'reponses':compte,
+		})
+	
+	
+		
+	
+	
 def etudiant_refresh(request, code):
 	try:
 		seance = Seance.objects.filter(code=code)
