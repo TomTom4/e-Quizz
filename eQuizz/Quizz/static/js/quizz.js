@@ -18,9 +18,9 @@ $(function() {
             window.question_numero = res.numero;
             $("input[name=id]").val(res.id);
             $(".numero").text(res.numero);
-			if (res.commentaire!=""){
+			/*if (res.commentaire!=""){
 				$(".commentaire").text("Indication: "+res.commentaire);
-			}
+			}*/
             $(".question-qcm").removeClass('hidden');
             $("#rien-en-cours").addClass('hidden');
 			$(".question-open").addClass('hidden');
@@ -30,9 +30,9 @@ $(function() {
 			window.question_numero = res.numero;
 			$("input[name=id]").val(res.id);
             $(".numero").text(res.numero);
-			if (res.commentaire!=""){
+			/*if (res.commentaire!=""){
 				$(".commentaire").text("Indication: "+res.commentaire);
-			}
+			}*/
 			$(".question-open").removeClass('hidden');
 			$(".question-qcm").addClass('hidden');
             $("#rien-en-cours").addClass('hidden');

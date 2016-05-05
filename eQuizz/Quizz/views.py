@@ -99,7 +99,6 @@ def etudiant_refresh(request, code):
 			'id':question.id,
 			'question_type':question.question_type,
 			'numero':question.numero,
-			'commentaire':question.commentaire,
 		})
 	else:
 		return JsonResponse({})
