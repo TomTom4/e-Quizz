@@ -5,6 +5,8 @@ from Quizz.forms import *
 import random
 from Quizz.models import *
 
+MAX_NUMBER_ANS = 4
+
 # Create your views here.
 #    myfield = models.CharField(validators=[RegexValidator(regex='^.{4}$', message='Length has to be 4', code='nomatch')])
 
@@ -71,6 +73,7 @@ def prof_refresh(request, code, question_id):
 	
 	return JsonResponse({
 		'reponses':compte,
+		'question_type':question.question_type,
 		})
 	
 	
@@ -120,6 +123,9 @@ def etudiant_post(request):
 	return JsonResponse({'success':1})
 
 def prof(request):
+	#compte = {'plop':'yolo'}
+	compte = {}
+	pourc = {}
 	addr = 'Quizz/prof.html'
 	if 'code' not in request.session:
 		code=0
@@ -131,18 +137,22 @@ def prof(request):
 		session = Seance(code=code)
 		session.save()
 		request.session['code']=code #Sauvegarde dans la session pour un usage ultérieur
+		question_number = 0
 	else:
 		code=request.session['code']
+		seance = Seance.objects.get(code=code)
 		if 'question_type' in request.POST:
 			if request.POST['question_type']=="qcm":
 				#creation de ask, une ligne de la table Question
-				seance = Seance.objects.get(code=code)
+				
 				ask = Question(seance=seance, question_type="QCM")
 				check = Question.objects.filter(seance=seance)
 				if not check:
 					ask.numero = 1
 				else:
 					ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
+					
+				question_number=ask.numero
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
 				ask.commentaire = request.POST['commentaire']
@@ -150,13 +160,15 @@ def prof(request):
 
 			elif request.POST['question_type'] == "open":
 				#creation de ask, une ligne de la table Question
-				seance = Seance.objects.get(code=code)
+				#seance = Seance.objects.get(code=code)
 				ask = Question(seance=seance, question_type="Open")
 				check = Question.objects.filter(seance=seance)
 				if not check:
 					ask.numero = 1
 				else:
 					ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
+					
+				question_number=ask.numero
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
 				ask.commentaire = request.POST['commentaire']
@@ -165,6 +177,42 @@ def prof(request):
 			elif request.POST['question_type'] == "close":
 				request.session.flush()
 				return redirect('/')
+				
+			elif request.POST['question_type'] == "next":
+				question_number = int(request.POST['qnumber'])
+				question_number = question_number + 1
+				#Attention il est possible d'avancer dans les questions!!!
+				
+			elif request.POST['question_type'] == "prec":
+				question_number = int(request.POST['qnumber'])
+				if question_number > 1:
+					question_number = question_number - 1
+			
+			#On entre dans ce cas si jamais on a pas de requêtes (en l'occurence si jamais on perd la co par exemple
+		else:
+			question_number = Question.objects.filter(seance=seance).latest('id').numero
+				
+		question = Question.objects.filter(seance=seance)
+		if question:
+			
+			question = Question.objects.filter(seance=seance, numero=question_number).get()
+			
+			#question_number = question.numero
+			total = Reponse_QCM.objects.filter(question=question).count()
+			
+			#Pour utilisation avec ID
+			#question = Question.objects.filter(seance=seance, id=question_id)
+			if question.question_type=="QCM":
+			#On récupère les réponses à une question donnée
+			#answers=Reponse_QCM.objects.filter(question=question)
+				for ans in range(0,MAX_NUMBER_ANS):
+					compte[ans]=Reponse_QCM.objects.filter(question=question, valeur=ans).count()
+					if total>0:
+						pourc[ans]=(compte[ans]*100)/total
+					else:
+						pourc[ans]=0
+				compte_sorted=sorted(compte)
+			#elif question.question_type=="Open":
 
 	return render(request, addr, locals())
 
@@ -174,12 +222,15 @@ def logout(request):
 	
 ERR_SALLE_INTROUVABLE = 1
 ERR_CODE_INVALIDE = 2
+ERR_NO_QUESTION = 3
 
 def error_message(errmsg):
 	if errmsg == ERR_SALLE_INTROUVABLE:
 		error = "Impossible de trouver cette salle"
 	if errmsg == ERR_CODE_INVALIDE:
 		error = "Veuillez entrer un numéro de salle valide."
+	if errmsg == ERR_NO_QUESTION:
+		error = "Une erreur inattendue s'est produite, veuillez réessayer plus tard."
 	return error
 
 def error(request, errmsg):

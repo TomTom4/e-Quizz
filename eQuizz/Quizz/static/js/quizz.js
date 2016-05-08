@@ -62,4 +62,20 @@ $(function() {
 	  
     }
 
+	//Expérimental
+	/*if(window.page=="prof"){
+		window.question_numero=-1;
+		window.refresh_prof = function(){
+			$.getJSON("/prof_refresh/"+window.code+"/"+window.question_numero, function(res){
+				if (res.error) {
+            		alert('Erreur : ' + res.error);
+         		}
+         		else if(res.question_type="QCM"
+			
+				
+		
+	}
+	}
+	}*/
+
 });

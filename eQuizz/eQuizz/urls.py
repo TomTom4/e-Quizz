@@ -26,4 +26,5 @@ urlpatterns = [
 	url(r'^prof', views.prof),
 	url(r'^error/(?P<id>\d+)', views.error),
 	url(r'^logout/', views.logout),
+	url(r'^prof_refresh/[0-9]*/[0-9]*', views.prof_refresh),
 ]

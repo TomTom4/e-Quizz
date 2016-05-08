@@ -1,5 +1,7 @@
 {% extends "Quizz/main.html" %}
 
+{% load quizz %}
+
 {% block body %}
 
 <div class="jumbotron">
@@ -28,6 +30,41 @@
     </div>
     <!-- placer dans cette deuxieme div les charts -->
     <div class="col-lg-6">
+		<div class="row">
+			<form method ="post" action={% url 'Quizz.views.prof' %}>
+       	 		{% csrf_token %}
+       	 		<input type="hidden" value="{{ question_number }}" name="qnumber"/>
+				<div class="col-sm-offset-1 col-sm-1">
+					<button type="submit" name="question_type" value="prec"><</button><!--Bouton pour naviguer dans les questions-->
+				</div>
+				<div class="col-sm-offset-1 col-sm-6">
+					<p style="text-align:center;">Question n°{{ question_number }}</p>
+				</div>
+				<div class="col-sm-offset-1 col-sm-1">
+					<button type="submit" name="question_type" value="next">></button> <!--Bouton pour naviguer dans les questions-->
+				</form>
+			</div>
+		</div>
+		<!--Ce qui suit est valable pour les QCM => on a un affichage IND2PENDANT du nombre de réponses données-->
+		<div class="row">
+			<div class="col-sm-offset-2 col-sm-1">
+				<!--Lettre des réponses-->
+				<p>Réponse</p>
+				{% for index in compte_sorted %}
+					<p>{{ index }}</p>
+				{% endfor %}
+				<!--Travail en cours-->
+			</div>
+			<div class="col-sm-offset-1 col-sm-6" style="text-align:right;">
+				<!-- Nombre de réponses -->
+				<p>Nombre de réponses</p>
+				{% for index in compte_sorted %}
+					<p>{{ compte|get_item:index }} ({{ pourc|get_item:index }}%)</p>
+				{% endfor %}
+				<!--Travail en cours-->
+			</div>
+
+		</div>
 
     </div>
   </div>
@@ -44,5 +81,10 @@
     lectus a, rutrum pharetra sem. Sed ullamcorper ipsum orci, a faucibus sem congue sed. Maecenas varius nibh vitae enim rutrum, a posuere odio volutpat.
   </p>
 </div>
+
+<script>
+  window.page = "prof";
+  window.code = {{code}};
+</script>
 
 {% endblock %}
