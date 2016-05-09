@@ -1,4 +1,5 @@
 # coding: utf8
+from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from Quizz.forms import *
@@ -217,6 +218,7 @@ def prof(request):
 				compte_sorted=sorted(compte)
 			#elif question.question_type=="Open":
 
+	current_site = get_current_site(request)
 	return render(request, addr, locals())
 
 def logout(request):

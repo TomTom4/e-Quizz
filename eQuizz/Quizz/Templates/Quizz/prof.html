@@ -6,7 +6,7 @@
 
 <div class="jumbotron">
   <div class="container">
-    <p style="text-align:center">Salle n° {{code}}</p>
+    <p style="text-align:center">Salle n° {{code}} </p>
     <div id="qrcode"></div>
 
     <!-- il faudra remplir ici pour les options du prof!-->
@@ -90,27 +90,49 @@
   window.page = "prof";
   window.code = {{code}};
 
-  new QRCode(document.getElementById("qrcode"), "http://localhost:8000/etudiant/"+{{code}});
+  new QRCode(
+    document.getElementById("qrcode"),
+    {
+      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' %}/{{code}}",
+      colorDark : "#000000",
+      colorLight : "#EEE",
+    }
+  );
 
   var ctx = $("#qcmchart");
-  var qcmchart = new Chart(ctx, {
+  window.qcmchart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ["A", "B", "C", "D", "E", "F"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3]
-        }]
+      labels: ["A", "B", "C", "D", "E", "F"],
+      datasets: [{
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3]
+      }]
     },
     options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero:true
-                }
-            }]
-        }
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero:true
+          }
+        }]
+      }
     }
-});
+  });
+
+  window.refresh_prof = function() {
+    $.getJSON("/prof_refresh/" + window.code + "/" + 60, function(res) {
+      if (res.error) {
+        alert('Erreur : ' + res.error);
+      }
+      else if (res.question_type == "QCM" && res.reponses != "undefined") {
+        window.qcmchart.data.datasets[0].data = res.reponses;
+        window.qcmchart.update();
+      }
+
+      setTimeout(window.refresh_prof, 2000);
+    });
+  };
+  window.refresh_prof();
 </script>
 {% endblock %}

@@ -34,38 +34,38 @@ $(function() {
           $("#rien-en-cours").addClass('hidden');
         }
 
-        setTimeout(window.refresh_etudiant, 10000);
+        setTimeout(window.refresh_etudiant, 1000);
       });
-  };
-  window.refresh_etudiant();
+    };
+    window.refresh_etudiant();
 
-$(".reponse").click(function() {
-  $(".question-qcm").addClass('hidden');
-  $(".question-open").addClass('hidden');
-  $("#rien-en-cours").removeClass('hidden');
-  $("input[name=valeur]").val($(this).attr('data-valeur'));
-  $(".question-qcm form").ajaxSubmit();
-});
-
-
-$(".open-submit").click(function() {
-  $(".question-qcm").addClass('hidden');
-  $(".question-open").addClass('hidden');
-  $("#rien-en-cours").removeClass('hidden');
-  //$("input[name=valeur]").val($(this).attr('data-valeur'));
-  $(".question-open form").ajaxSubmit();
-});
-
-}
+    $(".reponse").click(function() {
+      $(".question-qcm").addClass('hidden');
+      $(".question-open").addClass('hidden');
+      $("#rien-en-cours").removeClass('hidden');
+      $("input[name=valeur]").val($(this).attr('data-valeur'));
+      $(".question-qcm form").ajaxSubmit();
+    });
 
 
-//Expérimental
-/*if(window.page=="prof"){
-window.question_numero=-1;
-window.refresh_prof = function(){
-$.getJSON("/prof_refresh/"+window.code+"/"+window.question_numero, function(res){
-if (res.error) {
-alert('Erreur : ' + res.error);
+    $(".open-submit").click(function() {
+      $(".question-qcm").addClass('hidden');
+      $(".question-open").addClass('hidden');
+      $("#rien-en-cours").removeClass('hidden');
+      //$("input[name=valeur]").val($(this).attr('data-valeur'));
+      $(".question-open form").ajaxSubmit();
+    });
+
+  }
+
+
+  //Expérimental
+  /*if(window.page=="prof"){
+  window.question_numero=-1;
+  window.refresh_prof = function(){
+  $.getJSON("/prof_refresh/"+window.code+"/"+window.question_numero, function(res){
+  if (res.error) {
+  alert('Erreur : ' + res.error);
 }
 else if(res.question_type="QCM"
 
