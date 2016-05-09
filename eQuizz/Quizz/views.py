@@ -58,28 +58,31 @@ def prof_refresh(request, code, question_id):
 		return error_json(ERR_CODE_INVALIDE)
 	if not seance:
 		return error_json(ERR_SALLE_INTROUVABLE)
-		
+
 	#On récupère les question correspondant à une séance et un id donné
-	question = Question.objects.filter(seance=seance, id=question_id)
+	question = Question.objects.filter(seance=seance, id=question_id).last()
+	compte = []
+	if not question:
+		return error_json(ERR_QUESTION_INTROUVABLE)
 	if question.question_type=="QCM":
 		#On récupère les réponses à une question donnée
 		#answers=Reponse_QCM.objects.filter(question=question)
-		for ans in range(0,3):
-			compte[ans]=Reponse_QCM.objects.filter(question=question, valeur=ans).count()
+		for ans in range(0,6):
+			compte.append(Reponse_QCM.objects.filter(question=question, valeur=ans).count())
 	#elif question.question_type=="Open":
-	
+
 	if not question:
 		return JsonResponse({})
-	
+
 	return JsonResponse({
 		'reponses':compte,
 		'question_type':question.question_type,
 		})
-	
-	
-		
-	
-	
+
+
+
+
+
 def etudiant_refresh(request, code):
 	try:
 		seance = Seance.objects.filter(code=code)
@@ -93,10 +96,10 @@ def etudiant_refresh(request, code):
 		deja_repondu=Reponse_QCM.objects.filter(question=question, id_etudiant=request.session['id_student'])
 	elif question.question_type=="Open":
 		deja_repondu=Reponse_OPEN.objects.filter(question=question, id_etudiant=request.session['id_student'])
-	
+
 	if not question:
 		return JsonResponse({})
-		
+
 	if not deja_repondu:
 		return JsonResponse({
 			'id':question.id,
@@ -144,14 +147,14 @@ def prof(request):
 		if 'question_type' in request.POST:
 			if request.POST['question_type']=="qcm":
 				#creation de ask, une ligne de la table Question
-				
+
 				ask = Question(seance=seance, question_type="QCM")
 				check = Question.objects.filter(seance=seance)
 				if not check:
 					ask.numero = 1
 				else:
 					ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
-					
+
 				question_number=ask.numero
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
@@ -167,7 +170,7 @@ def prof(request):
 					ask.numero = 1
 				else:
 					ask.numero = Question.objects.filter(seance=seance).latest('numero').numero + 1
-					
+
 				question_number=ask.numero
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
@@ -177,29 +180,29 @@ def prof(request):
 			elif request.POST['question_type'] == "close":
 				request.session.flush()
 				return redirect('/')
-				
+
 			elif request.POST['question_type'] == "next":
 				question_number = int(request.POST['qnumber'])
 				question_number = question_number + 1
 				#Attention il est possible d'avancer dans les questions!!!
-				
+
 			elif request.POST['question_type'] == "prec":
 				question_number = int(request.POST['qnumber'])
 				if question_number > 1:
 					question_number = question_number - 1
-			
+
 			#On entre dans ce cas si jamais on a pas de requêtes (en l'occurence si jamais on perd la co par exemple
 		else:
 			question_number = Question.objects.filter(seance=seance).latest('id').numero
-				
+
 		question = Question.objects.filter(seance=seance)
 		if question:
-			
+
 			question = Question.objects.filter(seance=seance, numero=question_number).get()
-			
+
 			#question_number = question.numero
 			total = Reponse_QCM.objects.filter(question=question).count()
-			
+
 			#Pour utilisation avec ID
 			#question = Question.objects.filter(seance=seance, id=question_id)
 			if question.question_type=="QCM":
@@ -219,10 +222,11 @@ def prof(request):
 def logout(request):
 	request.session.flush()
 	return redirect('/')
-	
+
 ERR_SALLE_INTROUVABLE = 1
 ERR_CODE_INVALIDE = 2
 ERR_NO_QUESTION = 3
+ERR_QUESTION_INTROUVABLE = 4
 
 def error_message(errmsg):
 	if errmsg == ERR_SALLE_INTROUVABLE:
@@ -231,6 +235,8 @@ def error_message(errmsg):
 		error = "Veuillez entrer un numéro de salle valide."
 	if errmsg == ERR_NO_QUESTION:
 		error = "Une erreur inattendue s'est produite, veuillez réessayer plus tard."
+	if errmsg == ERR_QUESTION_INTROUVABLE:
+		error = "Impossible de trouver cette question."
 	return error
 
 def error(request, errmsg):
