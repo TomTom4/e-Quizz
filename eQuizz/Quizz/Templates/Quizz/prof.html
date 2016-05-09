@@ -6,7 +6,8 @@
 
 <div class="jumbotron">
   <div class="container">
-    <p style="text-align:center">Salle n° {{code}}<br/><br/>Salle du professeur</p>
+    <p style="text-align:center">Salle n° {{code}}</p>
+    <div id="qrcode"></div>
 
     <!-- il faudra remplir ici pour les options du prof!-->
     <div class = "col-lg-6">
@@ -75,16 +76,41 @@
 
 <div class="container">
   <h1>De la communication à double sens en cours avec e-Quizz !</h1>
-  <p>
-    Suspendisse vitae velit sit amet augue vulputate aliquam non id massa. Duis rutrum id tellus vel tristique. Suspendisse libero turpis, porta nec erat a, convallis aliquet arcu. Fusce accumsan ultricies augue id elementum. Fusce ullamcorper dignissim
-    mi vel maximus. Donec tempor, libero in suscipit porttitor, sem neque mollis libero, eu accumsan augue metus id nunc. Sed convallis iaculis eros eget accumsan. Nam tristique libero dui, a tincidunt mauris tempor sed. Sed ipsum velit, euismod vel
-    lectus a, rutrum pharetra sem. Sed ullamcorper ipsum orci, a faucibus sem congue sed. Maecenas varius nibh vitae enim rutrum, a posuere odio volutpat.
-  </p>
+  <p><canvas id="qcmchart" width="400" height="400"></canvas></p>
 </div>
+
+{% endblock %}
+
+{% block scripts %}
+{% load static %}
+<script src="{% static 'qrcode/qrcode.min.js' %}"></script>
+<script src="{% static 'js/chart.js' %}"></script>
 
 <script>
   window.page = "prof";
   window.code = {{code}};
-</script>
 
+  new QRCode(document.getElementById("qrcode"), "http://localhost:8000/etudiant/"+{{code}});
+
+  var ctx = $("#qcmchart");
+  var qcmchart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ["A", "B", "C", "D", "E", "F"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3]
+        }]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true
+                }
+            }]
+        }
+    }
+});
+</script>
 {% endblock %}

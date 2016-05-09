@@ -50,8 +50,8 @@ $(function() {
 		$("input[name=valeur]").val($(this).attr('data-valeur'));
         $(".question-qcm form").ajaxSubmit();
       });
-	  
-	  
+
+
 	  $(".open-submit").click(function() {
         $(".question-qcm").addClass('hidden');
 		$(".question-open").addClass('hidden');
@@ -59,8 +59,9 @@ $(function() {
 		//$("input[name=valeur]").val($(this).attr('data-valeur'));
         $(".question-open form").ajaxSubmit();
       });
-	  
+
     }
+
 
 	//Expérimental
 	/*if(window.page=="prof"){
@@ -71,9 +72,9 @@ $(function() {
             		alert('Erreur : ' + res.error);
          		}
          		else if(res.question_type="QCM"
-			
-				
-		
+
+
+
 	}
 	}
 	}*/
