@@ -13,8 +13,6 @@
     <form method ="post" action={% url 'Quizz.views.prof' %}>
       {% csrf_token %}
 
-      <input type ="text" id="comment" class="textfieldprof" name="commentaire" placeholder ="Votre commentaire ici"/>
-
       <button type ="submit" id="qcm" class="celprof" name="question_type" value ="qcm">
         <img alt="Nouvelle question QCM" src="{% static 'images/newqcm.svg' %}"/>
         <p>Débuter un QCM</p>
@@ -41,46 +39,15 @@
 
 <div class="container">
   <h1>De la communication à double sens en cours avec e-Quizz !</h1>
+
+  <input type ="text" id="comment" class="textfieldprof" name="commentaire" placeholder ="Votre commentaire ici"/>
   <div class="row">
     <div class="col-sm-6">
       <canvas id="qcmchart" width="400" height="400"></canvas>
     </div>
     <div class="col-sm-6">
-      <div class="row">
-  			<form method ="post" action={% url 'Quizz.views.prof' %}>
-         	 		{% csrf_token %}
-         	 		<input type="hidden" value="{{ question_number }}" name="qnumber"/>
-  				<div class="col-sm-offset-1 col-sm-1">
-  					<button type="submit" name="question_type" value="prec"><</button><!--Bouton pour naviguer dans les questions-->
-  				</div>
-  				<div class="col-sm-offset-1 col-sm-6">
-  					<p style="text-align:center;">Question n°{{ question_number }}</p>
-  				</div>
-  				<div class="col-sm-offset-1 col-sm-1">
-  					<button type="submit" name="question_type" value="next">></button> <!--Bouton pour naviguer dans les questions-->
-  				</form>
-  			</div>
-  		</div>
-  		<!--Ce qui suit est valable pour les QCM => on a un affichage IND2PENDANT du nombre de réponses données-->
-  		<div class="row">
-  			<div class="col-sm-offset-2 col-sm-1">
-  				<!--Lettre des réponses-->
-  				<p>Réponse</p>
-  				{% for index in compte_sorted %}
-  					<p>{{ index }}</p>
-  				{% endfor %}
-  				<!--Travail en cours-->
-  			</div>
-  			<div class="col-sm-offset-1 col-sm-6" style="text-align:right;">
-  				<!-- Nombre de réponses -->
-  				<p>Nombre de réponses</p>
-  				{% for index in compte_sorted %}
-  					<p>{{ compte|get_item:index }} ({{ pourc|get_item:index }}%)</p>
-  				{% endfor %}
-  				<!--Travail en cours-->
-  			</div>
+      <canvas id="qcmpiechart" width="400" height="400"></canvas>
 
-  		</div>
     </div>
   </div>
 </div>
@@ -104,24 +71,33 @@
     }
   );
 
-  var ctx = $("#qcmchart");
-  window.qcmchart = new Chart(ctx, {
+  window.qcmchart = new Chart($("#qcmchart"), {
     type: 'bar',
     data: {
       labels: ["A", "B", "C", "D", "E", "F"],
       datasets: [{
         label: 'Nombre de votes',
-        data: [0, 0, 0, 0, 0, 0]
+        data: [0, 0, 0, 0, 0, 0],
+        backgroundColor: [
+          "#aec7e8",
+          "#ffbb78",
+          "#98df8a",
+          "#ff9896",
+          "#c5b0d5",
+          "#c49c94",
+        ],
+        hoverBackgroundColor: [
+          "#1f77b4",
+          "#ff7f0e",
+          "#2ca02c",
+          "#d62728",
+          "#9467bd",
+          "#8c564b",
+        ]
       }]
     },
     options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero:true
-          }
-        }]
-      }
+      scales: { yAxes: [{ ticks: { beginAtZero:true }  }] },
     }
   });
 
