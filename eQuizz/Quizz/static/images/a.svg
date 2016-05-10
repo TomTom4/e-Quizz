@@ -31,29 +31,6 @@
          offset="1"
          id="stop5325" />
     </linearGradient>
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient4272"
-       id="radialGradient4278"
-       cx="314.6178"
-       cy="306.71228"
-       fx="314.6178"
-       fy="306.71228"
-       r="90"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(2,0,0,2,-532.09275,-524.80496)" />
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient4272">
-      <stop
-         style="stop-color:#5599ff;stop-opacity:1;"
-         offset="0"
-         id="stop4274" />
-      <stop
-         style="stop-color:#447ed5;stop-opacity:1"
-         offset="1"
-         id="stop4276" />
-    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5321"
@@ -77,9 +54,9 @@
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1920"
-     inkscape:window-height="1029"
-     inkscape:window-x="1920"
+     inkscape:window-width="1080"
+     inkscape:window-height="666"
+     inkscape:window-x="0"
      inkscape:window-y="25"
      inkscape:window-maximized="1"
      fit-margin-top="0"
@@ -109,7 +86,7 @@
        height="180"
        width="180"
        id="rect4152-37-3"
-       style="opacity:1;fill:url(#radialGradient4278);fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+       style="opacity:1;fill:#f2f2f2;fill-opacity:1;stroke:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <path
        style="opacity:0.18000004;fill:url(#linearGradient5327);fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
        d="m 83.842661,103.07135 85.862969,85.86297 27.52665,0 -2.11501,-18.68783 -95.459407,-95.459412 z"
