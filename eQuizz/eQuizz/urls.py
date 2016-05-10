@@ -22,10 +22,11 @@ urlpatterns = [
 	url(r'^$', views.home),
 	url(r'^etudiant/(.*)', views.etudiant),
     url(r'^etudiant_refresh/(.*)', views.etudiant_refresh),
-    url(r'^prof_refresh/(.*)/(.*)', views.prof_refresh),
+    #url(r'^prof_refresh/(?P<code>.*)/(?P<question_id>.*)', views.prof_refresh),
+    url(r'^prof_refresh/(?P<code>[0-9]*)/(?P<question_id>[0-9]*)', views.prof_refresh),
     url(r'^etudiant_post', views.etudiant_post),
 	url(r'^prof', views.prof),
 	url(r'^error/(?P<id>\d+)', views.error),
 	url(r'^logout/', views.logout),
-	url(r'^prof_refresh/[0-9]*/[0-9]*', views.prof_refresh),
+	
 ]
