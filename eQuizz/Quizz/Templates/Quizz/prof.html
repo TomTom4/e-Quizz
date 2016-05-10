@@ -30,7 +30,6 @@
 
     </form>
 
-
   </div>
 </div>
 
@@ -61,11 +60,12 @@
 <script>
   window.page = "prof";
   window.code = {{code}};
+  window.test = 0;
 
   new QRCode(
     document.getElementById("qrcode"),
     {
-      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' %}/{{code}}",
+      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' code=code question_id=question_number %}/{{code}}",
       colorDark : "#000000",
       colorLight : "#EEE",
     }
@@ -102,11 +102,17 @@
   });
 
   window.refresh_prof = function() {
-    $.getJSON("/prof_refresh/" + window.code + "/" + 60, function(res) {
-      if (res.error) {
+    $.getJSON("/prof_refresh/" + window.code + "/" + $("#qnumber").val(), function(res) {
+      if (res.qzero){
+      	$("#qcmchart").addClass('hidden');
+      	window.test=42;
+      	console.log("yolo");
+  	  }
+      else if (res.error) {
         alert('Erreur : ' + res.error);
       }
       else if (res.question_type == "QCM" && res.reponses != "undefined") {
+      	$("#qcmchart").removeClass('hidden');
         window.qcmchart.data.datasets[0].data = res.reponses;
         window.qcmchart.update();
       }

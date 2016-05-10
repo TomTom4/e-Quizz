@@ -61,19 +61,22 @@ def prof_refresh(request, code, question_id):
 		return error_json(ERR_SALLE_INTROUVABLE)
 
 	#On récupère les question correspondant à une séance et un id donné
-	question = Question.objects.filter(seance=seance, id=question_id).last()
-	compte = []
-	if not question:
-		return error_json(ERR_QUESTION_INTROUVABLE)
-	if question.question_type=="QCM":
-		#On récupère les réponses à une question donnée
-		#answers=Reponse_QCM.objects.filter(question=question)
-		for ans in range(0,6):
-			compte.append(Reponse_QCM.objects.filter(question=question, valeur=ans).count())
+	if question_id=="0":
+		return JsonResponse({'qzero':'qzero'})
+	else:
+		question = Question.objects.filter(seance=seance, numero=question_id).get()
+		compte = []
+		if not question:
+			return error_json(ERR_QUESTION_INTROUVABLE)
+		if question.question_type=="QCM":
+			#On récupère les réponses à une question donnée
+			#answers=Reponse_QCM.objects.filter(question=question)
+			for ans in range(0,6):
+				compte.append(Reponse_QCM.objects.filter(question=question, valeur=ans).count())
 	#elif question.question_type=="Open":
 
-	if not question:
-		return JsonResponse({})
+	#if not question:
+		#return JsonResponse({})
 
 	return JsonResponse({
 		'reponses':compte,
@@ -194,7 +197,12 @@ def prof(request):
 
 			#On entre dans ce cas si jamais on a pas de requêtes (en l'occurence si jamais on perd la co par exemple
 		else:
-			question_number = Question.objects.filter(seance=seance).latest('id').numero
+			question=Question.objects.filter(seance=seance)
+			if not question:
+				request.session.flush()
+				return redirect('/')
+			else:
+				question_number = Question.objects.filter(seance=seance).latest('id').numero
 
 		question = Question.objects.filter(seance=seance)
 		if question:
