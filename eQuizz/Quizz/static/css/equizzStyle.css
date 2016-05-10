@@ -19,15 +19,23 @@
 	text-align:center;
 }
 .celprof{
-    background-color: rgb(8,98,149);
-    width: auto;
-    border-radius: 6px;
+    background-color: white;
+    border:none;
     text-align:center;
-    color: rgb(255,255,255);
-    min-width: 100%;
+    border:5px solid #286090;
+    padding:0;
+    margin-right:10px;
 }
-.textfieldprof{
-    min-width: 100%;
+.celprof img {
+  width:200px;
+}
+.celprof p {
+    display: block;
+    font-size:1em;
+    padding:6px 12px;
+    background-color: #286090;
+    margin:0;
+    color:white;
 }
 
 .button{
@@ -110,6 +118,7 @@ body{
   padding: 12px;
   font-size: 20px;
 }
+
 
 .etudiant_perdu {
   text-align: center;  

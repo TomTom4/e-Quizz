@@ -7,6 +7,8 @@ $(function() {
   });
 
   if (window.page == "etudiant") {
+    console.log("Page étudiant");
+    
     window.question_numero = -1;
 
     window.refresh_etudiant = function() {
