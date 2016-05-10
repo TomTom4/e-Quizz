@@ -34,7 +34,7 @@
 		<div class="row">
 			<form method ="post" action={% url 'Quizz.views.prof' %}>
        	 		{% csrf_token %}
-       	 		<input type="hidden" value="{{ question_number }}" name="qnumber"/>
+       	 		<input type="hidden" id="qnumber" value="{{ question_number }}" name="qnumber"/>
 				<div class="col-sm-offset-1 col-sm-1">
 					<button type="submit" name="question_type" value="prec"><</button><!--Bouton pour naviguer dans les questions-->
 				</div>
@@ -89,11 +89,12 @@
 <script>
   window.page = "prof";
   window.code = {{code}};
+  window.test = 0;
 
   new QRCode(
     document.getElementById("qrcode"),
     {
-      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' %}/{{code}}",
+      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' code=code question_id=question_number %}/{{code}}",
       colorDark : "#000000",
       colorLight : "#EEE",
     }
@@ -106,7 +107,8 @@
       labels: ["A", "B", "C", "D", "E", "F"],
       datasets: [{
         label: '# of Votes',
-        data: [12, 19, 3, 5, 2, 3]
+        //data: [12, 19, 3, 5, 2, 3]
+        data: [0, 0, 0, 0, 0, 0]
       }]
     },
     options: {
@@ -121,11 +123,17 @@
   });
 
   window.refresh_prof = function() {
-    $.getJSON("/prof_refresh/" + window.code + "/" + 60, function(res) {
-      if (res.error) {
+    $.getJSON("/prof_refresh/" + window.code + "/" + $("#qnumber").val(), function(res) {
+      if (res.qzero){
+      	$("#qcmchart").addClass('hidden');
+      	window.test=42;
+      	console.log("yolo");
+  	  }
+      else if (res.error) {
         alert('Erreur : ' + res.error);
       }
       else if (res.question_type == "QCM" && res.reponses != "undefined") {
+      	$("#qcmchart").removeClass('hidden');
         window.qcmchart.data.datasets[0].data = res.reponses;
         window.qcmchart.update();
       }
