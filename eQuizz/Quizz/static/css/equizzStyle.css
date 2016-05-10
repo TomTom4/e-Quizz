@@ -111,4 +111,12 @@ body{
   font-size: 20px;
 }
 
+.etudiant_perdu {
+  text-align: center;  
+}
+.warning_yellow:hover{
+  transform :scale(0.9);
+}
+
+
 

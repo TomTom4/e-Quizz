@@ -47,6 +47,13 @@ $(function() {
       $(".question-qcm form").ajaxSubmit();
     });
 
+    $(".warning_yellow").click(function(){
+      $(".warning_yellow").addClass('hidden');
+      $("#warning_red").removeClass('hidden');
+      $("input[name = valeur_lost]").val($(this).attr('data-valeur'));
+      $("#warning form").ajaxSubmit();
+    });
+
 
     $(".open-submit").click(function() {
       $(".question-qcm").addClass('hidden');

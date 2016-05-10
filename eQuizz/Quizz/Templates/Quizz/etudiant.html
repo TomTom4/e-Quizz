@@ -45,6 +45,22 @@
 
 <div id="rien-en-cours">
   <p>Pas de question en cours ! Bonne sieste.</p>
+  <div class = "row">
+  		<div class =" col-lg-6 col-lg-offset-3 etudiant_perdu">
+  			<img src="/static/images/warning_yellow.png" class="warning_yellow" data-valeur="-1"/>
+  			<img src="/static/images/warning_red.png"  id="warning_red" class="hidden"/>
+  			<div class= "row" >
+  				Je suis perdu !	
+  			</div>
+  			<div id="warning" class="hidden">
+			    <form action="/etudiant_post" method="post">
+			    {% csrf_token %}
+			      <input type="text" name="lost" value="new Lost"/>
+			      <input type="text" name="valeur_lost"/>
+    		</form>
+  			</div>
+	  	</div>
+  </div>
   <!-- Ajouter ici le +/- -->
 </div>
 
