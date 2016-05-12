@@ -15,12 +15,12 @@
 
       <button type ="submit" id="qcm" class="celprof" name="question_type" value ="qcm">
         <img alt="Nouvelle question QCM" src="{% static 'images/newqcm.svg' %}"/>
-        <p>Débuter un QCM</p>
+        <p>Débuter une question à choix multiples</p>
       </button>
 
       <button type ="submit" id="open" class="celprof" name="question_type" value = "open">
         <img alt="Nouvelle question mot" src="{% static 'images/newtagcloud.svg' %}"/>
-        <p>Débuter une question mot</p>
+        <p>Débuter une question nuage de mots</p>
       </button>
 
       <button type ="submit" id="close" class="celprof"  name="question_type" value ="close">
@@ -74,7 +74,7 @@
   new QRCode(
     document.getElementById("qrcode"),
     {
-      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' code=code question_id=question_number %}/{{code}}",
+      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' code=code question_id=question_number %}",
       colorDark : "#000000",
       colorLight : "#EEE",
     }
@@ -90,6 +90,23 @@
         label: 'Nombre de votes',
         data: [0, 0, 0, 0, 0, 0],
         backgroundColor: [
+          "#666",
+          "#666",
+          "#666",
+          "#666",
+          "#666",
+          "#666",
+        ],
+        hoverBackgroundColor: [
+          "#999",
+          "#999",
+          "#999",
+          "#999",
+          "#999",
+          "#999",
+          "#999",
+        ],
+        /*backgroundColor: [
           "#aec7e8",
           "#ffbb78",
           "#98df8a",
@@ -104,7 +121,7 @@
           "#d62728",
           "#9467bd",
           "#8c564b",
-        ]
+        ]*/
       }]
     },
     options: {
