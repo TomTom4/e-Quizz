@@ -144,3 +144,17 @@ body{
 .warning_yellow:hover{
   transform :scale(0.9);
 }
+<<<<<<< HEAD
+=======
+
+.compteur{
+  font-size: 3em; 
+  color: #FFFFFF; 
+  text-align: center;
+  background-color: rgb(14,214,14);
+  width: 3em; 
+  
+
+}
+
+>>>>>>> bbc727c3d0d86c209c570bc74fe48708b2003f10

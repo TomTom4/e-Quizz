@@ -58,6 +58,7 @@ def prof_refresh(request, code, question_id):
 	#Constantes pour les tailles des textes
 	MAX_SIZE_VALUE=50
 	MIN_SIZE_VALUE=10
+	nb_reponses=0
 	try:
 		seance=Seance.objects.filter(code=code)
 	except ValueError:
@@ -89,7 +90,8 @@ def prof_refresh(request, code, question_id):
 			max=0
 			min=sys.maxint
 			#mots=sorted(mots)
-			for mot in mots:
+			for mot1 in mots:
+				mot = mot1.lower()
 				if mot not in count:
 					count[mot]=1
 				else:
@@ -130,12 +132,27 @@ def prof_refresh(request, code, question_id):
 				compte.append(temp)
 				temp=[]
 
-				nb_reponses=Reponse_QPEN.objects.filter(question=question).count()
 
+			# temp.append('max'+str(max))
+			# temp.append(25)
+			# compte.append(temp)
+			# temp=[]
+			#
+			# temp.append('min'+str(min))
+			# temp.append(25)
+			# compte.append(temp)
+			# temp=[]
+
+	#if not question:
+		#return JsonResponse({})
+	nb_reponses=Reponse_OPEN.objects.filter(question=question).count()
+	nb_lost = Lost.objects.filter(seance = seance).count()
 	return JsonResponse({
 		'reponses':compte,
 		'question_type':question.question_type,
+		'compteur': nb_lost,
 		'nb_reponses': nb_reponses,
+
 		})
 
 
@@ -184,7 +201,7 @@ def etudiant_post(request):
 			reponse.save()
 		return JsonResponse({'success':1})
 	if  'lost' in request.POST:
-		seance = Seance.objects.filter(code = request.session['code']).get()
+		seance = Seance.objects.filter(code = request.POST['code']).get()
 		etudiant = request.session['id_student']
 		lost = Lost(id_etudiant = etudiant, seance = seance)
 		lost.save()
@@ -290,6 +307,10 @@ def prof(request):
 
 	current_site = get_current_site(request)
 	return render(request, addr, locals())
+
+def qrcode(request, code):
+	current_site = get_current_site(request)
+	return render(request, "Quizz/qrcode.html", locals())
 
 def logout(request):
 	request.session.flush()

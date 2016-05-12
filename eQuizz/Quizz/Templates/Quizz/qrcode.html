@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="../../favicon.ico">
+
+<title>Equiz</title>
+
+<!-- Bootstrap core CSS -->
+{% load static %}
+<link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+
+<!-- Custom styles for this template -->
+<link href="{% static 'css/equizzStyle.css' %}" rel="stylesheet">
+
+
+<script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+</head>
+<body>
+  <center id="qrcode"></center>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{% static 'qrcode/qrcode.min.js' %}"></script>
+<script>
+new QRCode(
+  document.getElementById("qrcode"),
+  {
+    text : "http://{{current_site.domain}}{% url 'Quizz.views.etudiant' code=code %}",
+    colorDark : "#000000",
+    colorLight : "#EEE",
+  }
+);
+</script>
+</html>

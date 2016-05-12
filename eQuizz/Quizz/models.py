@@ -27,7 +27,7 @@ class Reponse_QCM(models.Model):
 
 	def __str__(self):
 		return self.answer_id
-		
+
 class Reponse_OPEN(models.Model):
 	question = models.ForeignKey('Question')
 	text = models.CharField(max_length=100)

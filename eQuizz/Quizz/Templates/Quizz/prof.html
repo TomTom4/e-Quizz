@@ -8,7 +8,11 @@
 <div class="jumbotron">
   <div class="container">
     <p style="text-align:center">Salle n° {{code}} </p>
-    <div id="qrcode"></div>
+
+    <div class="compteur">0</div>
+
+    <a href="{% url 'Quizz.views.qrcode' code=code %}" target="_blank">Afficher le QRCode</a>
+
 
     <form method ="post" action={% url 'Quizz.views.prof' %}>
       {% csrf_token %}
@@ -25,7 +29,7 @@
 
       <button type ="submit" id="close" class="celprof"  name="question_type" value ="close">
         <img alt="Mettre fin à la session" src="{% static 'images/exit.svg' %}"/>
-        <p>Terminer le cours</p>
+        <p>Terminer le cours et recevoir les données</p>
       </button>
 
       <input type ="text" id="comment" class="textfieldprof" name="commentaire" placeholder ="Votre commentaire ici"/>
@@ -62,7 +66,6 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'qrcode/qrcode.min.js' %}"></script>
 <script src="{% static 'js/chart.js' %}"></script>
 <script src="{% static 'wordcloud2/src/wordcloud2.js' %}"></script>
 
@@ -71,14 +74,14 @@
   window.code = {{code}};
   window.test = 0;
 
-  new QRCode(
+  /*new QRCode(
     document.getElementById("qrcode"),
     {
       text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' code=code question_id=question_number %}",
       colorDark : "#000000",
       colorLight : "#EEE",
     }
-  );
+  );*/
 
   window.mem_open_list = [];
   window.qcmchart = new Chart($("#qcmchart"), {
@@ -201,7 +204,10 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
         //console.log(window.options.list)
 
       }
-
+      $(".compteur").text(res.compteur);
+      if (res.compteur != 0){
+      	$(".compteur").css("background-color", "red");
+      }
       setTimeout(window.refresh_prof, 2000);
     });
   };
