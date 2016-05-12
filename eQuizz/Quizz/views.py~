@@ -5,7 +5,6 @@ from django.http import HttpResponse, HttpRequest, JsonResponse
 from Quizz.forms import *
 import random
 from Quizz.models import *
-import sys
 
 MAX_NUMBER_ANS = 4
 
@@ -54,9 +53,6 @@ def etudiant(request, code):
 	return render(request, addr, locals())
 
 def prof_refresh(request, code, question_id):
-	#Constantes pour les tailles des textes
-	MAX_SIZE_VALUE=50
-	MIN_SIZE_VALUE=10
 	try:
 		seance=Seance.objects.filter(code=code)
 	except ValueError:
@@ -77,65 +73,7 @@ def prof_refresh(request, code, question_id):
 			#answers=Reponse_QCM.objects.filter(question=question)
 			for ans in range(0,6):
 				compte.append(Reponse_QCM.objects.filter(question=question, valeur=ans).count())
-		elif question.question_type=="Open":
-			count={}
-			mots=[]
-			answers=Reponse_OPEN.objects.filter(question=question)
-			for ans in answers:
-				mots.append(ans.text)
-			max=0
-			min=sys.maxint
-			#mots=sorted(mots)
-			for mot in mots:
-				if mot not in count:
-					count[mot]=1
-				else:
-					count[mot]=count[mot]+1
-				if count[mot]>max:
-					max=count[mot]
-
-
-			for index in count:
-				if count[index]<min:
-					min=count[index]
-
-			#A ce moment-à on a les mots comptés dans compte[]
-			#On écrit dans compte qu'on considère comme un string
-			#compte=""
-			Range=MAX_SIZE_VALUE - MIN_SIZE_VALUE
-			temp=[]
-			compte=[]
-			for mot, value in count.items():
-
-
-				#Convertit les poids des valeurs entre 10 et 50
-
-				#On regarde le rapport entre max et min pour savoir quel algorithme de relation entre les réponses on prend
-				if ((max/min)<Range):
-					if value==max:
-						value=MAX_SIZE_VALUE
-					else:
-						value=((min*Range)/max) + MIN_SIZE_VALUE
-				else:
-					if max==min:
-						value=MAX_SIZE_VALUE
-					else:
-						value=int((((value-min)*(Range))/(max-min))+MIN_SIZE_VALUE)
-				#temp.append(mot+"-"+str(value)+"-"+str(count[mot]))
-				temp.append(mot)
-				temp.append(value)
-				compte.append(temp)
-				temp=[]
-
-			# temp.append('max'+str(max))
-			# temp.append(25)
-			# compte.append(temp)
-			# temp=[]
-			#
-			# temp.append('min'+str(min))
-			# temp.append(25)
-			# compte.append(temp)
-			# temp=[]
+	#elif question.question_type=="Open":
 
 	#if not question:
 		#return JsonResponse({})

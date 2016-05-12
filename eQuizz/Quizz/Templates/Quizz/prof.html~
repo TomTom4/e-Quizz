@@ -76,8 +76,7 @@
 
 <div class="container">
   <h1>De la communication à double sens en cours avec e-Quizz !</h1>
-  <!--<div><canvas id="test2" width="400" height="400"></canvas></div>-->
-  <p><canvas id="qcmchart" width="400" height="400"></canvas><canvas id="openchart"width="400" height="400"></canvas></p>
+  <p><canvas id="qcmchart" width="400" height="400"></canvas><canvas id="openchart" width="400" height="400"></canvas></p>
 </div>
 
 {% endblock %}
@@ -86,7 +85,7 @@
 {% load static %}
 <script src="{% static 'qrcode/qrcode.min.js' %}"></script>
 <script src="{% static 'js/chart.js' %}"></script>
-<script src="{% static 'wordcloud2/src/wordcloud2.js' %}"></script>
+<script src="{% static 'wordcloud2/src/wordcloud2.js %}"</script>
 
 <script>
   window.page = "prof";
@@ -101,7 +100,7 @@
       colorLight : "#EEE",
     }
   );
-  window.mem_open_list = [];
+
   var ctx = $("#qcmchart");
   window.qcmchart = new Chart(ctx, {
     type: 'bar',
@@ -123,39 +122,15 @@
       }
     }
   });
-
-  //http://stackoverflow.com/questions/7837456/how-to-compare-arrays-in-javascript
-
-  // Warn if overriding existing method
-if(Array.prototype.equals)
-    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
-// attach the .equals method to Array's prototype to call it on any array
-Array.prototype.equals = function (array) {
-    // if the other array is a falsy value, return
-    if (!array)
-        return false;
-
-    // compare lengths - can save a lot of time
-    if (this.length != array.length)
-        return false;
-
-    for (var i = 0, l=this.length; i < l; i++) {
-        // Check if we have nested arrays
-        if (this[i] instanceof Array && array[i] instanceof Array) {
-            // recurse into the nested arrays
-            if (!this[i].equals(array[i]))
-                return false;
-        }
-        else if (this[i] != array[i]) {
-            // Warning - two different object instances will never be equal: {x:20} != {x:20}
-            return false;
-        }
-    }
-    return true;
-}
-// Hide method from for-in loops
-Object.defineProperty(Array.prototype, "equals", {enumerable: false});
-
+  /*
+  var options = {}
+  
+  options.list='{% for element, val in compte %}{{ val }} {{ element }}\n{% end for %}';
+  options.gridsize=1;
+  options.rotationRatio=0;
+  options.weightFactor=1;
+  window.openchart = WordChart(<<emplacement>>, <<options (c'est un objet)>>)
+*/
   window.refresh_prof = function() {
     $.getJSON("/prof_refresh/" + window.code + "/" + $("#qnumber").val(), function(res) {
       if (res.qzero){
@@ -175,20 +150,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
       else if (res.question_type == "Open" && res.reponses != "undefined") {
       	$("#openchart").removeClass('hidden');
       	$("#qcmchart").addClass('hidden');
-        if (!(res.reponses.equals(window.mem_open_list))){
-          console.log("salut");
-          console.log(window.mem_open_list);
-          console.log(res.reponses);
-
-          //On ne redessine que si on a des données différentes.
-          //Supprimer l'attribut color permet d'avoir que du noir pou rle texte, le supprimer met ds couleurs aléatoires à chaque dessin du nuage.
-          window.mem_open_list = res.reponses;
-          WordCloud(document.getElementById('openchart'),{list:res.reponses, rotateRatio:0, color:'#000000'});
-        }
-        //window.options.list = res.reponses;
-        //console.log(window.options.list)
-
-      }
+      	
 
       setTimeout(window.refresh_prof, 2000);
     });
