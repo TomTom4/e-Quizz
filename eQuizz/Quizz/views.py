@@ -292,6 +292,10 @@ def prof(request):
 	current_site = get_current_site(request)
 	return render(request, addr, locals())
 
+def qrcode(request, code):
+	current_site = get_current_site(request)
+	return render(request, "Quizz/qrcode.html", locals())
+
 def logout(request):
 	request.session.flush()
 	return redirect('/')
