@@ -58,6 +58,7 @@ def prof_refresh(request, code, question_id):
 	#Constantes pour les tailles des textes
 	MAX_SIZE_VALUE=50
 	MIN_SIZE_VALUE=10
+	nb_reponses=0
 	try:
 		seance=Seance.objects.filter(code=code)
 	except ValueError:
@@ -130,7 +131,7 @@ def prof_refresh(request, code, question_id):
 				compte.append(temp)
 				temp=[]
 
-				nb_reponses=Reponse_QPEN.objects.filter(question=question).count()
+				nb_reponses=Reponse_OPEN.objects.filter(question=question).count()
 
 	return JsonResponse({
 		'reponses':compte,
