@@ -140,10 +140,11 @@ def prof_refresh(request, code, question_id):
 
 	#if not question:
 		#return JsonResponse({})
-
+	nb_lost = Lost.objects.filter(seance = seance).count()
 	return JsonResponse({
 		'reponses':compte,
 		'question_type':question.question_type,
+		'compteur': nb_lost,
 		})
 
 

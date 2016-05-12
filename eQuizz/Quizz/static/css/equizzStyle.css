@@ -127,5 +127,13 @@ body{
   transform :scale(0.9);
 }
 
+.compteur{
+  font-size: 3em; 
+  color: #FFFFFF; 
+  text-align: center;
+  background-color: rgb(14,214,14);
+  width: 3em; 
+  
 
+}
 

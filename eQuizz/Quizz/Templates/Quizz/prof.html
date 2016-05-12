@@ -9,6 +9,8 @@
   <div class="container">
     <p style="text-align:center">Salle n° {{code}} </p>
     <div id="qrcode"></div>
+    <div class="compteur">0
+    </div>
 
     <form method ="post" action={% url 'Quizz.views.prof' %}>
       {% csrf_token %}
@@ -179,7 +181,10 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
         //console.log(window.options.list)
 
       }
-
+      $(".compteur").text(res.compteur);
+      if (res.compteur != 0){
+      	$(".compteur").css("background-color", "red");
+      } 
       setTimeout(window.refresh_prof, 2000);
     });
   };
