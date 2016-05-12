@@ -40,7 +40,9 @@
 
 <div class="container">
   <h1>De la communication à double sens en cours avec e-Quizz !</h1>
-
+  <div class="row">
+    <div style="text-align:center;">Nombre de réponses: <span id="nb_rep">0</span></div>
+  </div>
 
   <div class="row">
     <div class="col-sm-6">
@@ -148,6 +150,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
       	$("#qcmchart").addClass('hidden');
         $("#qcmpiechart").addClass('hidden');
         $("#openchart").addClass('hidden');
+
       	window.test=42;
       	console.log("yolo");
   	  }
@@ -160,20 +163,22 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
       	$("#openchart").addClass('hidden');
         window.qcmchart.data.datasets[0].data = res.reponses;
         window.qcmchart.update();
+        document.getElementById("nb_rep").innerHTML = res.nb_reponses;
       }
       else if (res.question_type == "Open" && res.reponses != "undefined") {
       	$("#openchart").removeClass('hidden');
       	$("#qcmchart").addClass('hidden');
         $("#qcmpiechart").addClass('hidden');
         if (!(res.reponses.equals(window.mem_open_list))){
-          console.log("salut");
+          /*console.log("salut");
           console.log(window.mem_open_list);
-          console.log(res.reponses);
+          console.log(res.reponses);*/
 
           //On ne redessine que si on a des données différentes.
           //Supprimer l'attribut color permet d'avoir que du noir pou rle texte, le supprimer met ds couleurs aléatoires à chaque dessin du nuage.
           window.mem_open_list = res.reponses;
           WordCloud(document.getElementById('openchart'),{list:res.reponses, rotateRatio:0, color:'#000000'});
+          document.getElementById("nb_rep").innerHTML = res.nb_reponses;
         }
         //window.options.list = res.reponses;
         //console.log(window.options.list)
