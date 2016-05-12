@@ -79,7 +79,7 @@ body{
 }
 .question-qcm.bloc .reponse {
   display: inline-block;
-  height: 50%;
+  height: 33%;
   width: 50%;
   max-height: 50vh;
   font-size: 0;
@@ -101,6 +101,12 @@ body{
   background-image: url('/static/images/c.svg');
 }
 .question-qcm.bloc .reponse.d {
+  background-image: url('/static/images/d.svg');
+}
+.question-qcm.bloc .reponse.e {
+  background-image: url('/static/images/d.svg');
+}
+.question-qcm.bloc .reponse.f {
   background-image: url('/static/images/d.svg');
 }
 
