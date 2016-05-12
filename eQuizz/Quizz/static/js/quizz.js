@@ -7,6 +7,8 @@ $(function() {
   });
 
   if (window.page == "etudiant") {
+    console.log("Page étudiant");
+    
     window.question_numero = -1;
 
     window.refresh_etudiant = function() {
@@ -45,6 +47,13 @@ $(function() {
       $("#rien-en-cours").removeClass('hidden');
       $("input[name=valeur]").val($(this).attr('data-valeur'));
       $(".question-qcm form").ajaxSubmit();
+    });
+
+    $(".warning_yellow").click(function(){
+      $(".warning_yellow").addClass('hidden');
+      $("#warning_red").removeClass('hidden');
+      $("input[name = valeur_lost]").val($(this).attr('data-valeur'));
+      $("#warning form").ajaxSubmit();
     });
 
 

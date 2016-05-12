@@ -1,4 +1,5 @@
 {% extends "Quizz/main.html" %}
+{% load static %}
 
 {% load quizz %}
 
@@ -9,65 +10,28 @@
     <p style="text-align:center">Salle n° {{code}} </p>
     <div id="qrcode"></div>
 
-    <!-- il faudra remplir ici pour les options du prof!-->
-    <div class = "col-lg-6">
-      <form method ="post" action={% url 'Quizz.views.prof' %}>
-        {% csrf_token %}
-        <ul class="list-unstyled">
-          <li>
-            <input type ="text" id="comment" class="textfieldprof" name="commentaire" placeholder ="Votre commentaire ici"/>
-          </li>
-          <li>
-            <button type ="submit" id="open" class="celprof" name="question_type" value = "open">Débuter une question ouverte</button>
-          </li>
-          <li>
-            <button type ="submit" id="qcm" class="celprof" name="question_type" value ="qcm">Débuter un QCM</button>
-          </li>
-          <li>
-            <button type ="submit" id="close" class="celprof"  name="question_type" value ="close">Terminer la session</button>
-          </li>
-        </ul>
-      </form>
-    </div>
-    <!-- placer dans cette deuxieme div les charts -->
-    <div class="col-lg-6">
-		<div class="row">
-			<form method ="post" action={% url 'Quizz.views.prof' %}>
-       	 		{% csrf_token %}
-       	 		<input type="hidden" id="qnumber" value="{{ question_number }}" name="qnumber"/>
-				<div class="col-sm-offset-1 col-sm-1">
-					<button type="submit" name="question_type" value="prec"><</button><!--Bouton pour naviguer dans les questions-->
-				</div>
-				<div class="col-sm-offset-1 col-sm-6">
-					<p style="text-align:center;">Question n°{{ question_number }}</p>
-				</div>
-				<div class="col-sm-offset-1 col-sm-1">
-					<button type="submit" name="question_type" value="next">></button> <!--Bouton pour naviguer dans les questions-->
-				</form>
-			</div>
-		</div>
-		<!--Ce qui suit est valable pour les QCM => on a un affichage IND2PENDANT du nombre de réponses données-->
-		<div class="row">
-			<div class="col-sm-offset-2 col-sm-1">
-				<!--Lettre des réponses-->
-				<p>Réponse</p>
-				{% for index in compte_sorted %}
-					<p>{{ index }}</p>
-				{% endfor %}
-				<!--Travail en cours-->
-			</div>
-			<div class="col-sm-offset-1 col-sm-6" style="text-align:right;">
-				<!-- Nombre de réponses -->
-				<p>Nombre de réponses</p>
-				{% for index in compte_sorted %}
-					<p>{{ compte|get_item:index }} ({{ pourc|get_item:index }}%)</p>
-				{% endfor %}
-				<!--Travail en cours-->
-			</div>
+    <form method ="post" action={% url 'Quizz.views.prof' %}>
+      {% csrf_token %}
 
-		</div>
+      <button type ="submit" id="qcm" class="celprof" name="question_type" value ="qcm">
+        <img alt="Nouvelle question QCM" src="{% static 'images/newqcm.svg' %}"/>
+        <p>Débuter un QCM</p>
+      </button>
 
-    </div>
+      <button type ="submit" id="open" class="celprof" name="question_type" value = "open">
+        <img alt="Nouvelle question mot" src="{% static 'images/newtagcloud.svg' %}"/>
+        <p>Débuter une question mot</p>
+      </button>
+
+      <button type ="submit" id="close" class="celprof"  name="question_type" value ="close">
+        <img alt="Mettre fin à la session" src="{% static 'images/exit.svg' %}"/>
+        <p>Terminer le cours</p>
+      </button>
+
+      <input type ="text" id="comment" class="textfieldprof" name="commentaire" placeholder ="Votre commentaire ici"/>
+
+    </form>
+
   </div>
 </div>
 
@@ -76,14 +40,26 @@
 
 <div class="container">
   <h1>De la communication à double sens en cours avec e-Quizz !</h1>
-  <!--<div><canvas id="test2" width="400" height="400"></canvas></div>-->
-  <p><canvas id="qcmchart" width="400" height="400"></canvas><canvas id="openchart"width="400" height="400"></canvas></p>
+
+
+  <div class="row">
+    <div class="col-sm-6">
+      <canvas id="qcmchart" width="400" height="400"></canvas>
+    </div>
+    <div class="col-sm-6">
+      <canvas id="qcmpiechart" width="400" height="400"></canvas>
+
+    </div>
+
+  </div>
+  <div class="row">
+    <canvas id="openchart"width="800" height="400">
+  </div>
 </div>
 
 {% endblock %}
 
 {% block scripts %}
-{% load static %}
 <script src="{% static 'qrcode/qrcode.min.js' %}"></script>
 <script src="{% static 'js/chart.js' %}"></script>
 <script src="{% static 'wordcloud2/src/wordcloud2.js' %}"></script>
@@ -101,26 +77,36 @@
       colorLight : "#EEE",
     }
   );
+
   window.mem_open_list = [];
-  var ctx = $("#qcmchart");
-  window.qcmchart = new Chart(ctx, {
+  window.qcmchart = new Chart($("#qcmchart"), {
+
     type: 'bar',
     data: {
       labels: ["A", "B", "C", "D", "E", "F"],
       datasets: [{
-        label: '# of Votes',
-        //data: [12, 19, 3, 5, 2, 3]
-        data: [0, 0, 0, 0, 0, 0]
+        label: 'Nombre de votes',
+        data: [0, 0, 0, 0, 0, 0],
+        backgroundColor: [
+          "#aec7e8",
+          "#ffbb78",
+          "#98df8a",
+          "#ff9896",
+          "#c5b0d5",
+          "#c49c94",
+        ],
+        hoverBackgroundColor: [
+          "#1f77b4",
+          "#ff7f0e",
+          "#2ca02c",
+          "#d62728",
+          "#9467bd",
+          "#8c564b",
+        ]
       }]
     },
     options: {
-      scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero:true
-          }
-        }]
-      }
+      scales: { yAxes: [{ ticks: { beginAtZero:true }  }] },
     }
   });
 
@@ -157,9 +143,11 @@ Array.prototype.equals = function (array) {
 Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
   window.refresh_prof = function() {
-    $.getJSON("/prof_refresh/" + window.code + "/" + $("#qnumber").val(), function(res) {
+    $.getJSON("/prof_refresh/" + window.code + "/" + {{question_number}}, function(res) {
       if (res.qzero){
       	$("#qcmchart").addClass('hidden');
+        $("#qcmpiechart").addClass('hidden');
+        $("#openchart").addClass('hidden');
       	window.test=42;
       	console.log("yolo");
   	  }
@@ -168,6 +156,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
       }
       else if (res.question_type == "QCM" && res.reponses != "undefined") {
       	$("#qcmchart").removeClass('hidden');
+        $("#qcmpiechart").removeClass('hidden');
       	$("#openchart").addClass('hidden');
         window.qcmchart.data.datasets[0].data = res.reponses;
         window.qcmchart.update();
@@ -175,6 +164,7 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
       else if (res.question_type == "Open" && res.reponses != "undefined") {
       	$("#openchart").removeClass('hidden');
       	$("#qcmchart").addClass('hidden');
+        $("#qcmpiechart").addClass('hidden');
         if (!(res.reponses.equals(window.mem_open_list))){
           console.log("salut");
           console.log(window.mem_open_list);
