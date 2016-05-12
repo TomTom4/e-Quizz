@@ -58,6 +58,7 @@ def prof_refresh(request, code, question_id):
 	#Constantes pour les tailles des textes
 	MAX_SIZE_VALUE=50
 	MIN_SIZE_VALUE=10
+	nb_reponses=0
 	try:
 		seance=Seance.objects.filter(code=code)
 	except ValueError:
@@ -71,6 +72,7 @@ def prof_refresh(request, code, question_id):
 	else:
 		question = Question.objects.filter(seance=seance, numero=question_id).get()
 		compte = []
+
 		if not question:
 			return error_json(ERR_QUESTION_INTROUVABLE)
 		if question.question_type=="QCM":
@@ -78,6 +80,7 @@ def prof_refresh(request, code, question_id):
 			#answers=Reponse_QCM.objects.filter(question=question)
 			for ans in range(0,6):
 				compte.append(Reponse_QCM.objects.filter(question=question, valeur=ans).count())
+			nb_reponses=Reponse_QCM.objects.filter(question=question).count()
 		elif question.question_type=="Open":
 			count={}
 			mots=[]
@@ -128,6 +131,7 @@ def prof_refresh(request, code, question_id):
 				compte.append(temp)
 				temp=[]
 
+
 			# temp.append('max'+str(max))
 			# temp.append(25)
 			# compte.append(temp)
@@ -140,11 +144,14 @@ def prof_refresh(request, code, question_id):
 
 	#if not question:
 		#return JsonResponse({})
+	nb_reponses=Reponse_OPEN.objects.filter(question=question).count()
 	nb_lost = Lost.objects.filter(seance = seance).count()
 	return JsonResponse({
 		'reponses':compte,
 		'question_type':question.question_type,
 		'compteur': nb_lost,
+		'nb_reponses': nb_reponses,
+
 		})
 
 
@@ -192,12 +199,12 @@ def etudiant_post(request):
 			reponse.text = text
 			reponse.save()
 		return JsonResponse({'success':1})
-	if  'lost' in request.POST: 
+	if  'lost' in request.POST:
 		seance = Seance.objects.filter(code = request.session['code']).get()
 		etudiant = request.session['id_student']
 		lost = Lost(id_etudiant = etudiant, seance = seance)
 		lost.save()
-		return JsonResponse({'success':1}) 
+		return JsonResponse({'success':1})
 
 
 def prof(request):
@@ -299,6 +306,10 @@ def prof(request):
 
 	current_site = get_current_site(request)
 	return render(request, addr, locals())
+
+def qrcode(request, code):
+	current_site = get_current_site(request)
+	return render(request, "Quizz/qrcode.html", locals())
 
 def logout(request):
 	request.session.flush()
