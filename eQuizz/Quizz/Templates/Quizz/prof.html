@@ -188,9 +188,9 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
 
       }
       $(".compteur").text(res.compteur);
-      if (res.compteur != 0){
+      if (res.compteur != 0 && !(res.qzero)){
       	$(".compteur").css("background-color", "red");
-      } 
+      }
       setTimeout(window.refresh_prof, 2000);
     });
   };
