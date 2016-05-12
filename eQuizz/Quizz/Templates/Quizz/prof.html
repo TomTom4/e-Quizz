@@ -8,7 +8,11 @@
 <div class="jumbotron">
   <div class="container">
     <p style="text-align:center">Salle n° {{code}} </p>
-    <div id="qrcode"></div>
+
+    <div class="compteur">0</div>
+
+    <a href="{% url 'Quizz.views.qrcode' code=code %}" target="_blank">Afficher le QRCode</a>
+
 
     <form method ="post" action={% url 'Quizz.views.prof' %}>
       {% csrf_token %}
@@ -40,6 +44,9 @@
 
 <div class="container">
   <h1>De la communication à double sens en cours avec e-Quizz !</h1>
+  <div class="row">
+    <div style="text-align:center;">Nombre de réponses: <span id="nb_rep">0</span></div>
+  </div>
 
   <div class="row">
     <div class="col-sm-6">
@@ -49,30 +56,36 @@
       <canvas id="qcmpiechart" width="400" height="400"></canvas>
 
     </div>
+
+  </div>
+  <div class="row">
+    <canvas id="openchart"width="800" height="400">
   </div>
 </div>
 
 {% endblock %}
 
 {% block scripts %}
-<script src="{% static 'qrcode/qrcode.min.js' %}"></script>
 <script src="{% static 'js/chart.js' %}"></script>
+<script src="{% static 'wordcloud2/src/wordcloud2.js' %}"></script>
 
 <script>
   window.page = "prof";
   window.code = {{code}};
   window.test = 0;
 
-  new QRCode(
+  /*new QRCode(
     document.getElementById("qrcode"),
     {
-      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' code=code question_id=question_number %}/{{code}}",
+      text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' code=code question_id=question_number %}",
       colorDark : "#000000",
       colorLight : "#EEE",
     }
-  );
+  );*/
 
+  window.mem_open_list = [];
   window.qcmchart = new Chart($("#qcmchart"), {
+
     type: 'bar',
     data: {
       labels: ["A", "B", "C", "D", "E", "F"],
@@ -102,10 +115,45 @@
     }
   });
 
+  //http://stackoverflow.com/questions/7837456/how-to-compare-arrays-in-javascript
+
+  // Warn if overriding existing method
+if(Array.prototype.equals)
+    console.warn("Overriding existing Array.prototype.equals. Possible causes: New API defines the method, there's a framework conflict or you've got double inclusions in your code.");
+// attach the .equals method to Array's prototype to call it on any array
+Array.prototype.equals = function (array) {
+    // if the other array is a falsy value, return
+    if (!array)
+        return false;
+
+    // compare lengths - can save a lot of time
+    if (this.length != array.length)
+        return false;
+
+    for (var i = 0, l=this.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (this[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!this[i].equals(array[i]))
+                return false;
+        }
+        else if (this[i] != array[i]) {
+            // Warning - two different object instances will never be equal: {x:20} != {x:20}
+            return false;
+        }
+    }
+    return true;
+}
+// Hide method from for-in loops
+Object.defineProperty(Array.prototype, "equals", {enumerable: false});
+
   window.refresh_prof = function() {
     $.getJSON("/prof_refresh/" + window.code + "/" + {{question_number}}, function(res) {
       if (res.qzero){
       	$("#qcmchart").addClass('hidden');
+        $("#qcmpiechart").addClass('hidden');
+        $("#openchart").addClass('hidden');
+
       	window.test=42;
       	console.log("yolo");
   	  }
@@ -114,8 +162,34 @@
       }
       else if (res.question_type == "QCM" && res.reponses != "undefined") {
       	$("#qcmchart").removeClass('hidden');
+        $("#qcmpiechart").removeClass('hidden');
+      	$("#openchart").addClass('hidden');
         window.qcmchart.data.datasets[0].data = res.reponses;
         window.qcmchart.update();
+        document.getElementById("nb_rep").innerHTML = res.nb_reponses;
+      }
+      else if (res.question_type == "Open" && res.reponses != "undefined") {
+      	$("#openchart").removeClass('hidden');
+      	$("#qcmchart").addClass('hidden');
+        $("#qcmpiechart").addClass('hidden');
+        if (!(res.reponses.equals(window.mem_open_list))){
+          /*console.log("salut");
+          console.log(window.mem_open_list);
+          console.log(res.reponses);*/
+
+          //On ne redessine que si on a des données différentes.
+          //Supprimer l'attribut color permet d'avoir que du noir pou rle texte, le supprimer met ds couleurs aléatoires à chaque dessin du nuage.
+          window.mem_open_list = res.reponses;
+          WordCloud(document.getElementById('openchart'),{list:res.reponses, rotateRatio:0, color:'#000000'});
+          document.getElementById("nb_rep").innerHTML = res.nb_reponses;
+        }
+        //window.options.list = res.reponses;
+        //console.log(window.options.list)
+
+      }
+      $(".compteur").text(res.nb_lost);
+      if (res.nb_lost != 0){
+      	$(".compteur").css("background-color", "red");
       }
 
     }).always(function() {

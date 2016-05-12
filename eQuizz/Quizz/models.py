@@ -14,7 +14,7 @@ class Seance(models.Model):
 	#							verbose_name="Date de parution")
 	id = models.AutoField(primary_key = True) # inutile, généré automatiquement
 	code = models.IntegerField(unique = True) #check for lengthpython
-
+	date = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return self.id
@@ -24,14 +24,16 @@ class Reponse_QCM(models.Model):
 	question = models.ForeignKey('Question')
 	valeur = models.PositiveSmallIntegerField() # 0 => A | 1 => B | 2 => C...
 	id_etudiant = models.IntegerField()
+	date = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return self.answer_id
-		
+
 class Reponse_OPEN(models.Model):
 	question = models.ForeignKey('Question')
 	text = models.CharField(max_length=100)
 	id_etudiant = models.IntegerField()
+	date = models.DateTimeField(auto_now_add=True)
 
 	def __str__(self):
 		return self.answer_id
@@ -48,6 +50,14 @@ class Question(models.Model):
 	numero = models.PositiveSmallIntegerField()
 	commentaire = models.TextField(null = True)
 	question_type = models.CharField(max_length=3, choices=QUESTION_TYPE, default=QCM)
+	date = models.DateTimeField(auto_now_add=True)
 
+	def __str__(self):
+		return str(self.id)
+
+class Lost(models.Model):
+	date = models.DateTimeField(auto_now_add=True)
+	id_etudiant = models.IntegerField()
+	seance = models.ForeignKey('seance')
 	def __str__(self):
 		return str(self.id)

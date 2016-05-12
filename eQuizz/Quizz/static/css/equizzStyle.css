@@ -79,7 +79,7 @@ body{
 }
 .question-qcm.bloc .reponse {
   display: inline-block;
-  height: 50%;
+  height: 33%;
   width: 50%;
   max-height: 50vh;
   font-size: 0;
@@ -103,6 +103,12 @@ body{
 .question-qcm.bloc .reponse.d {
   background-image: url('/static/images/d.svg');
 }
+.question-qcm.bloc .reponse.e {
+  background-image: url('/static/images/d.svg');
+}
+.question-qcm.bloc .reponse.f {
+  background-image: url('/static/images/d.svg');
+}
 
 .question-qcm.bloc.hidden {
   display: block!important;
@@ -121,11 +127,23 @@ body{
 
 
 .etudiant_perdu {
-  text-align: center;  
+  text-align: center;
 }
 .warning_yellow:hover{
   transform :scale(0.9);
 }
 
+.compteur{
+  font-size: 3em;
+  color: #FFFFFF;
+  text-align: center;
+  background-color: rgb(14,214,14);
+  width: 3em;
 
 
+}
+
+.qrcode p {
+  text-align: center;
+  font-size:32px;
+}
