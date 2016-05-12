@@ -90,7 +90,8 @@ def prof_refresh(request, code, question_id):
 			max=0
 			min=sys.maxint
 			#mots=sorted(mots)
-			for mot in mots:
+			for mot1 in mots:
+				mot = mot1.lower()
 				if mot not in count:
 					count[mot]=1
 				else:
