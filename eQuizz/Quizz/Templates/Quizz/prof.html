@@ -204,10 +204,11 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
         //console.log(window.options.list)
 
       }
-      $(".compteur").text(res.compteur);
-      if (res.compteur != 0){
+      $(".compteur").text(res.nb_lost);
+      if (res.nb_lost != 0){
       	$(".compteur").css("background-color", "red");
       }
+    }).always(function() {
       setTimeout(window.refresh_prof, 2000);
     });
   };

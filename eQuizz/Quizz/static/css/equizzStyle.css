@@ -97,7 +97,7 @@ body{
 }
 .question-qcm.bloc .reponse {
   display: inline-block;
-  height: 50%;
+  height: 33%;
   width: 50%;
   max-height: 50vh;
   font-size: 0;
@@ -119,6 +119,12 @@ body{
   background-image: url('/static/images/c.svg');
 }
 .question-qcm.bloc .reponse.d {
+  background-image: url('/static/images/d.svg');
+}
+.question-qcm.bloc .reponse.e {
+  background-image: url('/static/images/d.svg');
+}
+.question-qcm.bloc .reponse.f {
   background-image: url('/static/images/d.svg');
 }
 
@@ -144,17 +150,19 @@ body{
 .warning_yellow:hover{
   transform :scale(0.9);
 }
-<<<<<<< HEAD
-=======
+
 
 .compteur{
-  font-size: 3em; 
-  color: #FFFFFF; 
+  font-size: 3em;
+  color: #FFFFFF;
   text-align: center;
   background-color: rgb(14,214,14);
-  width: 3em; 
-  
+  width: 3em;
+
 
 }
 
->>>>>>> bbc727c3d0d86c209c570bc74fe48708b2003f10
+.qrcode p {
+  text-align: center;
+  font-size:32px;
+}

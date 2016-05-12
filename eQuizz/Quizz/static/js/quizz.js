@@ -8,7 +8,7 @@ $(function() {
 
   if (window.page == "etudiant") {
     console.log("Page étudiant");
-    
+
     window.question_numero = -1;
 
     window.refresh_etudiant = function() {
@@ -36,6 +36,7 @@ $(function() {
           $("#rien-en-cours").addClass('hidden');
         }
 
+      }).always(function() {
         setTimeout(window.refresh_etudiant, 1000);
       });
     };

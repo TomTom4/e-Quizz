@@ -20,7 +20,8 @@
 <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
 
 </head>
-<body>
+<body class="qrcode">
+  <p>Salle n° <strong>{{code}}</strong></p>
   <center id="qrcode"></center>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
@@ -31,7 +32,7 @@ new QRCode(
   {
     text : "http://{{current_site.domain}}{% url 'Quizz.views.etudiant' code=code %}",
     colorDark : "#000000",
-    colorLight : "#EEE",
+    colorLight : "#FFF",
   }
 );
 </script>

@@ -66,11 +66,14 @@ def prof_refresh(request, code, question_id):
 	if not seance:
 		return error_json(ERR_SALLE_INTROUVABLE)
 
+	data = {}
+
 	#On récupère les question correspondant à une séance et un id donné
 	if question_id=="0":
-		return JsonResponse({'qzero':'qzero'})
+		data['qzero'] = 'qzero'
 	else:
 		question = Question.objects.filter(seance=seance, numero=question_id).get()
+		data['question_type'] = question.question_type
 		compte = []
 
 		if not question:
@@ -80,8 +83,10 @@ def prof_refresh(request, code, question_id):
 			#answers=Reponse_QCM.objects.filter(question=question)
 			for ans in range(0,6):
 				compte.append(Reponse_QCM.objects.filter(question=question, valeur=ans).count())
-			nb_reponses=Reponse_QCM.objects.filter(question=question).count()
+			data['nb_reponses'] = Reponse_QCM.objects.filter(question=question).count()
+			data['reponses'] = compte
 		elif question.question_type=="Open":
+			data['nb_reponses'] = Reponse_OPEN.objects.filter(question=question).count()
 			count={}
 			mots=[]
 			answers=Reponse_OPEN.objects.filter(question=question)
@@ -111,8 +116,6 @@ def prof_refresh(request, code, question_id):
 			temp=[]
 			compte=[]
 			for mot, value in count.items():
-
-
 				#Convertit les poids des valeurs entre 10 et 50
 
 				#On regarde le rapport entre max et min pour savoir quel algorithme de relation entre les réponses on prend
@@ -132,6 +135,8 @@ def prof_refresh(request, code, question_id):
 				compte.append(temp)
 				temp=[]
 
+			data['compte'] = compte
+
 
 			# temp.append('max'+str(max))
 			# temp.append(25)
@@ -145,15 +150,9 @@ def prof_refresh(request, code, question_id):
 
 	#if not question:
 		#return JsonResponse({})
-	nb_reponses=Reponse_OPEN.objects.filter(question=question).count()
-	nb_lost = Lost.objects.filter(seance = seance).count()
-	return JsonResponse({
-		'reponses':compte,
-		'question_type':question.question_type,
-		'compteur': nb_lost,
-		'nb_reponses': nb_reponses,
 
-		})
+	data['nb_lost'] = Lost.objects.filter(seance = seance).count()
+	return JsonResponse(data)
 
 
 
@@ -167,7 +166,10 @@ def etudiant_refresh(request, code):
 	if not seance:
 		return error_json(ERR_SALLE_INTROUVABLE)
 
-	question = Question.objects.filter(seance=seance).latest('id')
+	questions = Question.objects.filter(seance=seance)
+	if not questions:
+		return JsonResponse({})
+	question = questions.latest('id')
 	if question.question_type=="QCM":
 		deja_repondu=Reponse_QCM.objects.filter(question=question, id_etudiant=request.session['id_student'])
 	elif question.question_type=="Open":
@@ -213,7 +215,7 @@ def prof(request):
 	compte = {}
 	pourc = {}
 	addr = 'Quizz/prof.html'
-	if 'code' not in request.session:
+	if 'code' not in request.session: # On crée une nouvelle séance
 		code=0
 		for index in range(0,9):
 			numb=random.randint(1, 9)
@@ -224,7 +226,7 @@ def prof(request):
 		session.save()
 		request.session['code']=code #Sauvegarde dans la session pour un usage ultérieur
 		question_number = 0
-	else:
+	else: # On utilise la séance dans la session
 		code=request.session['code']
 		seance = Seance.objects.get(code=code)
 		if 'question_type' in request.POST:
@@ -278,8 +280,9 @@ def prof(request):
 		else:
 			question=Question.objects.filter(seance=seance)
 			if not question:
-				request.session.flush()
-				return redirect('/')
+				question_number = 0
+				#request.session.flush()
+				#return redirect('/')
 			else:
 				question_number = Question.objects.filter(seance=seance).latest('id').numero
 
