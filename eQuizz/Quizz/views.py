@@ -46,6 +46,7 @@ def etudiant(request, code):
 					id=id+numb
 
 				request.session['id_student']=id #Création d'un id étudiant/session
+			id_etudiant=request.session['id_student']
 
 	except ValueError:
 		addr='Quizz/error.html'
@@ -189,7 +190,14 @@ def etudiant_post(request):
 			text = request.POST['texte']
 			reponse.text = text
 			reponse.save()
-	return JsonResponse({'success':1})
+		return JsonResponse({'success':1})
+	if  'lost' in request.POST: 
+		seance = Seance.objects.filter(code = request.session['code']).get()
+		etudiant = request.session['id_student']
+		lost = Lost(id_etudiant = etudiant, seance = seance)
+		lost.save()
+		return JsonResponse({'success':1}) 
+
 
 def prof(request):
 	#compte = {'plop':'yolo'}

@@ -51,3 +51,10 @@ class Question(models.Model):
 
 	def __str__(self):
 		return str(self.id)
+
+class Lost(models.Model):
+	date = models.DateTimeField(auto_now_add=True)
+	id_etudiant = models.IntegerField()
+	seance = models.ForeignKey('seance')
+	def __str__(self):
+		return str(self.id)

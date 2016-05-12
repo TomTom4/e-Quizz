@@ -45,6 +45,8 @@ $(function() {
       $(".question-qcm").addClass('hidden');
       $(".question-open").addClass('hidden');
       $("#rien-en-cours").removeClass('hidden');
+      $(".warning_yellow").removeClass('hidden');
+      $("#warning_red").addClass('hidden');
       $("input[name=valeur]").val($(this).attr('data-valeur'));
       $(".question-qcm form").ajaxSubmit();
     });
@@ -52,7 +54,7 @@ $(function() {
     $(".warning_yellow").click(function(){
       $(".warning_yellow").addClass('hidden');
       $("#warning_red").removeClass('hidden');
-      $("input[name = valeur_lost]").val($(this).attr('data-valeur'));
+      //$("input[name = valeur_lost]").val($(this).attr('data-valeur'));
       $("#warning form").ajaxSubmit();
     });
 
