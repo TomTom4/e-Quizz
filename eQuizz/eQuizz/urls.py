@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^prof_refresh/(?P<code>[0-9]*)/(?P<question_id>[0-9]*)', views.prof_refresh),
     url(r'^etudiant_post', views.etudiant_post),
 	url(r'^prof', views.prof),
+    url(r'^download', views.download),
 	url(r'^error/(?P<id>\d+)', views.error),
     url(r'^qrcode/(?P<code>[0-9]*)', views.qrcode),
 	url(r'^logout/', views.logout),

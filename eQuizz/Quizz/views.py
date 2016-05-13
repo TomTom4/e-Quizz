@@ -1,4 +1,5 @@
 # coding: utf8
+import csv
 from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest, JsonResponse
@@ -15,7 +16,7 @@ from django.utils import timezone
 MAX_NUMBER_ANS = 4
 
 # Create your views here.
-#    myfield = models.CharField(validators=[RegexValidator(regex='^.{4}$', message='Length has to be 4', code='nomatch')])
+#	myfield = models.CharField(validators=[RegexValidator(regex='^.{4}$', message='Length has to be 4', code='nomatch')])
 
 def home(request):
 
@@ -108,7 +109,7 @@ def prof_refresh(request, code, question_id):
 
 		elif question.question_type=="Open":
 			##########################
-			#    Temps de réponse    #
+			#	Temps de réponse	#
 			##########################
 			reponses = Reponse_OPEN.objects.filter(question=question)
 			tempsreponse = [0 for i in range(10)]
@@ -195,7 +196,7 @@ def prof_refresh(request, code, question_id):
 	data['nb_lost'] = Lost.objects.filter(seance = seance).count()
 
 	##########################
-	#     graphe de losts    #
+	#	 graphe de losts	#
 	##########################
 	reponses = Lost.objects.filter(seance = seance)
 	NOMBRE = 20
@@ -214,7 +215,6 @@ def prof_refresh(request, code, question_id):
 				tempsreponse[t] = tempsreponse[t] + 1
 	data['lost_data'] = tempsreponse
 	data['lost_datax'] = tempsreponsex
-	data['ZZZ'] = min
 
 	return JsonResponse(data)
 
@@ -277,6 +277,21 @@ def etudiant_post(request):
 		return JsonResponse({'success':1})
 
 
+def download(request):
+	# Create the HttpResponse object with the appropriate CSV header.
+	response = HttpResponse(content_type='text/csv')
+	response['Content-Disposition'] = 'attachment; filename="export.csv"'
+
+	if 'code' not in request.session:
+		return error_message(ERR_SALLE_INTROUVABLE)
+
+	writer = csv.writer(response)
+	writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+	writer.writerow(['Second row', 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+
+	return response
+
+
 def prof(request):
 	#compte = {'plop':'yolo'}
 	compte = {}
@@ -284,7 +299,7 @@ def prof(request):
 	addr = 'Quizz/prof.html'
 	if 'code' not in request.session: # On crée une nouvelle séance
 		code=0
-		for index in range(0,9):
+		for index in range(0,5):
 			numb=random.randint(1, 9)
 			numb=numb*(10**index)
 			code=code+numb
@@ -310,7 +325,6 @@ def prof(request):
 				question_number=ask.numero
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
-				ask.commentaire = request.POST['commentaire']
 				ask.save()
 
 			elif request.POST['question_type'] == "open":
@@ -344,16 +358,23 @@ def prof(request):
 					question_number = question_number - 1
 
 			#On entre dans ce cas si jamais on a pas de requêtes (en l'occurence si jamais on perd la co par exemple
-		else:
-			question=Question.objects.filter(seance=seance)
-			if not question:
-				question_number = 0
-				#request.session.flush()
-				#return redirect('/')
-			else:
-				question_number = Question.objects.filter(seance=seance).latest('id').numero
 
-		question = Question.objects.filter(seance=seance)
+		if "commentaire" in request.POST:
+			question=Question.objects.filter(seance=seance, id=request.POST['id']).get()
+			question.commentaire = request.POST['commentaire']
+			question.save()
+
+		question=Question.objects.filter(seance=seance)
+		question_number = 0
+		question_id = 0
+			#request.session.flush()
+			#return redirect('/')
+		if question:
+			q = Question.objects.filter(seance=seance).latest('id')
+			question_id = q.id
+			question_commentaire = q.commentaire
+			question_number = q.numero
+
 		if question:
 
 			question = Question.objects.filter(seance=seance, numero=question_number).get()

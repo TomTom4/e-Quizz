@@ -43,23 +43,30 @@
 
 <div id="rien-en-cours">
   <div class="container">
-    <p>Il n'y a pas de question en cours. Les questions s'affichent automatiquement.</p>
-    <div class = "row">
-    		<div class =" col-lg-6 col-lg-offset-3 etudiant_perdu">
-    			<img src="/static/images/warning_yellow.png" class="warning_yellow" data-valeur="-1"/>
-    			<img src="/static/images/warning_red.png"  id="warning_red" class="hidden"/>
-    			<div class= "row" >
-    				Je suis perdu !
-    			</div>
-    			<div id="warning" class="hidden">
-  			    <form action="/etudiant_post" method="post">
-  			    {% csrf_token %}
-  			      <input type="text" name="lost" value="new Lost"/>
-              <input type="hidden" name="code" value="{{code}}"/>
-      		</form>
-    			</div>
-  	  	</div>
+    <div class="bloc-prof">
+      <h2>Pas de question en cours</h2>
+      <p>Les nouvelles questions s'affichent automatiquement.</p>
     </div>
+
+    <div class="bloc-prof">
+      <h2>Ca va trop vite ?</h2>
+      <p>Vous pouvez signaler à l'enseignant que vous êtes perdu en cliquant ici :</p>
+
+      <div class ="etudiant_perdu">
+        <img src="/static/images/warning_yellow.png" class="warning_yellow" data-valeur="-1"/>
+        <img src="/static/images/warning_red.png"  id="warning_red" class="hidden"/>
+        <p>Je suis perdu !</p>
+        <div id="warning" class="hidden">
+          <form action="/etudiant_post" method="post">
+          {% csrf_token %}
+            <input type="text" name="lost" value="new Lost"/>
+            <input type="hidden" name="code" value="{{code}}"/>
+        </form>
+        </div>
+      </div>
+    </div>
+
+
   </div>
 </div>
 

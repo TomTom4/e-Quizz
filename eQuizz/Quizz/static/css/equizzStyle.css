@@ -139,6 +139,7 @@ body{
   display: block!important;
   height: 0%;
   width: 0%;
+  opacity: 0;
 }
 .question-qcm.bloc.hidden .reponse {
   transform: scale(0);
@@ -153,6 +154,9 @@ body{
 
 .etudiant_perdu {
   text-align: center;
+}
+.etudiant_perdu img {
+  max-width: 80%;
 }
 .warning_yellow:hover{
   transform :scale(0.9);
@@ -178,20 +182,23 @@ body{
   width: 100%;
 }
 
-.bloc {
+.bloc-prof {
   background-color: #EFEFEF;
   padding:10px 20px;
   margin-bottom:20px;
 }
 
 #salle {
-  background-color: #286090;
+  background-color: white;
   display: inline-block;
   padding: 10px;
-  color: white;
 }
 #salle span {
   color: black;
   background-color: white;
   padding:1px 3px;
+}
+
+h2, h3 {
+  margin-top: 8px;
 }

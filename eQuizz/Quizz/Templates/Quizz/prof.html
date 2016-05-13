@@ -7,7 +7,7 @@
 
 
 <div class="container">
-  <div class="bloc">
+  <div class="bloc-prof">
 
     <h2 id="salle">Salle n° <span>{{code}}</span></h2>
 
@@ -37,8 +37,6 @@
         <p>Terminer le cours et recevoir les données</p>
       </button>
 
-      <input type ="text" id="comment" class="textfieldprof" name="commentaire" placeholder ="Votre commentaire ici"/>
-
     </form>
 
   </div>
@@ -51,26 +49,41 @@
 
   <div class="row">
     <div class="col-sm-6">
-      <div class="bloc">
+      <div class="bloc-prof qcm">
         <h3>Réponses au QCM</h3>
         <canvas id="qcmchart" width="400" height="300"></canvas>
-
+      </div>
+      <div class="bloc-prof open">
+        <h3>Nuage de mots</h3>
         <canvas id="openchart" width="400" height="300"></canvas>
       </div>
     </div>
-    <div class="col-sm-6">
-      <div class="bloc">
+    <div class="col-sm-6 qcm open">
+      <div class="bloc-prof qcm open">
+        <h3>Question n°{{question_number}}</h3>
+        <p>Vous pouvez ajouter un commentaire pour vous souvenir de la question.</p>
+        <form method ="post" action={% url 'Quizz.views.prof' %}>
+          {% csrf_token %}
+          <p><textarea id="comment" class="textfieldprof" name="commentaire" placeholder ="Page 37 du Powerpoint..." style="width:100%;">{{question_commentaire}}</textarea></p>
+          <input type="hidden" name="id" value="{{question_id}}"/>
+          <button type ="submit" id="close" name="question_type">
+            Ajouter un commentaire
+          </button>
+        </form>
+      </div>
+
+      <div class="bloc-prof">
         <h3>Nombre de réponses : <strong><span id="nb_rep">0</span></strong></h3>
       </div>
 
-      <div class="bloc">
+      <div class="bloc-prof">
         <h3>Temps de réponse</h3>
         <canvas id="timechart" width="400" height="200"></canvas>
       </div>
     </div>
   </div>
 
-  <div class="bloc">
+  <div class="bloc-prof">
     <h3>Personnes perdues</h3>
     <div style="height:150px;">
       <canvas id="lostchart" width="800" height="200"></canvas>
@@ -183,17 +196,15 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
   window.refresh_prof = function() {
     $.getJSON("/prof_refresh/" + window.code + "/" + {{question_number}}, function(res) {
       if (res.qzero){
-      	$("#qcmchart").addClass('hidden');
-        $("#qcmpiechart").addClass('hidden');
-        $("#openchart").addClass('hidden');
+      	$(".qcm, .open").addClass('hidden');
   	  }
       else if (res.error) {
         alert('Erreur : ' + res.error);
       }
       else if (res.question_type == "QCM" && res.reponses != "undefined") {
-      	$("#qcmchart").removeClass('hidden');
-        $("#qcmpiechart").removeClass('hidden');
-      	$("#openchart").addClass('hidden');
+        $(".open").addClass('hidden');
+        $(".qcm").removeClass('hidden');
+
         window.qcmchart.data.datasets[0].data = res.reponses;
         window.qcmchart.update();
         document.getElementById("nb_rep").innerHTML = res.nb_reponses;
@@ -207,9 +218,9 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
         window.timechart.data.labels = res.tempsreponsex;
         window.timechart.update();
 
-      	$("#openchart").removeClass('hidden');
-      	$("#qcmchart").addClass('hidden');
-        $("#qcmpiechart").addClass('hidden');
+        $(".qcm").addClass('hidden');
+        $(".open").removeClass('hidden');
+
         if (window.mem_open_list == "undefined" || !(res.reponses.equals(window.mem_open_list))){
           /*console.log("salut");
           console.log(window.mem_open_list);
