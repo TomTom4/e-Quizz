@@ -43,7 +43,7 @@ def etudiant(request, code):
 			error="Impossible de trouver cette salle"
 		else:
 			addr='Quizz/etudiant.html'
-			request.session['code']=code
+			#request.session['code']=code
 			if 'id_student' not in request.session:
 				id=0
 				for index in range(0,9):
