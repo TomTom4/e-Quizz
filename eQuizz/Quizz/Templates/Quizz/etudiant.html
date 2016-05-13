@@ -31,13 +31,17 @@
 <div class="question-open bloc hidden">
   <!--<div class="titre">Question n°<span class="numero">0</span></div>-->
   <div class="question ouverte">
-    <form action="/etudiant_post" method="post" id="formopen">
-      {% csrf_token %}
-      <input type="hidden" name="question_type" value="open"/>
-      <input type="text" name="texte"/>
-      <input type="hidden" name="id"/>
-	  <input type="button" class="open-submit" name="submit" value="Répondre"/>
-    </form>
+    <div class="bloc-prof">
+      <h2>Question nuage de mots</h2>
+      <p>Saisissez un mot ou une expression :</p>
+      <form action="/etudiant_post" method="post" id="formopen">
+        {% csrf_token %}
+        <input type="hidden" name="question_type" value="open"/>
+        <input type="text" name="texte"/>
+        <input type="hidden" name="id"/>
+  	  <input type="button" class="open-submit" name="submit" value="Répondre"/>
+      </form>
+    </div>
   </div>
 </div>
 

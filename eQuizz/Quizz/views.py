@@ -340,7 +340,6 @@ def prof(request):
 				question_number=ask.numero
 				# if request.POST['commentaire'] !="votre commentaire ici":
 					# ajout d'un commentaire à la question si il y a
-				ask.commentaire = request.POST['commentaire']
 				ask.save()
 
 			elif request.POST['question_type'] == "close":
