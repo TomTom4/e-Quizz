@@ -1,8 +1,8 @@
 {% extends "Quizz/main.html" %}
 
 {% block navbar %}
-<p class="navbar-text question-qcm hidden">
-  Question n°<span class="numero"></span> | <span class="commentaire"></span>
+<p class="navbar-text question-qcm question-open hidden">
+  Question n°<span class="numero"></span> <span class="commentaire"></span>
 </p>
 {% endblock %}
 
@@ -39,7 +39,7 @@
         <input type="hidden" name="question_type" value="open"/>
         <input type="text" name="texte"/>
         <input type="hidden" name="id"/>
-  	  <input type="button" class="open-submit" name="submit" value="Répondre"/>
+  	    <input type="submit" class="open-submit" name="submit" value="Répondre"/>
       </form>
     </div>
   </div>
