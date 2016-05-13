@@ -33,8 +33,13 @@
       </button>
 
       <a href="{% url 'Quizz.views.download' %}" id="close" class="celprof">
+        <img alt="Mettre fin à la session" src="{% static 'images/download.svg' %}"/>
+        <p>Télécharger les données de la séance</p>
+      </a>
+
+      <button type ="submit" id="close" class="celprof" name="question_type" value = "close">
         <img alt="Mettre fin à la session" src="{% static 'images/exit.svg' %}"/>
-        <p>Terminer le cours et recevoir les données</p>
+        <p>Terminer le cours et revenir à l'accueil</p>
       </a>
 
     </form>
