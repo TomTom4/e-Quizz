@@ -5,7 +5,12 @@ from django.http import HttpResponse, HttpRequest, JsonResponse
 from Quizz.forms import *
 import random
 from Quizz.models import *
+from django.db.models import Max, Min
 import sys
+import re
+import unicodedata
+import datetime
+from django.utils import timezone
 
 MAX_NUMBER_ANS = 4
 
@@ -85,7 +90,41 @@ def prof_refresh(request, code, question_id):
 				compte.append(Reponse_QCM.objects.filter(question=question, valeur=ans).count())
 			data['nb_reponses'] = Reponse_QCM.objects.filter(question=question).count()
 			data['reponses'] = compte
+
+			reponses = Reponse_QCM.objects.filter(question=question)
+			tempsreponse = [0 for i in range(10)]
+			tempsreponsex = [i for i in range(10)]
+			if reponses:
+				max = reponses.aggregate(Max('date'))['date__max']
+				min = question.date
+				tt = (max - min).total_seconds()
+				dt = int(tt/10)
+				tempsreponsex = [i*dt for i in range(10)]
+				for r in reponses:
+					t = int(round(((r.date - min).total_seconds()/tt) * 9))
+					tempsreponse[t] = tempsreponse[t] + 1
+			data['tempsreponse'] = tempsreponse
+			data['tempsreponsex'] = tempsreponsex
+
 		elif question.question_type=="Open":
+			##########################
+			#    Temps de réponse    #
+			##########################
+			reponses = Reponse_OPEN.objects.filter(question=question)
+			tempsreponse = [0 for i in range(10)]
+			tempsreponsex = [i for i in range(10)]
+			if reponses:
+				max = reponses.aggregate(Max('date'))['date__max']
+				min = question.date
+				tt = (max - min).total_seconds()
+				dt = int(tt/10)
+				tempsreponsex = [i*dt for i in range(10)]
+				for r in reponses:
+					t = int(round(((r.date - min).total_seconds()/tt) * 9))
+					tempsreponse[t] = tempsreponse[t] + 1
+			data['tempsreponse'] = tempsreponse
+			data['tempsreponsex'] = tempsreponsex
+
 			data['nb_reponses'] = Reponse_OPEN.objects.filter(question=question).count()
 			count={}
 			mots=[]
@@ -97,6 +136,8 @@ def prof_refresh(request, code, question_id):
 			#mots=sorted(mots)
 			for mot1 in mots:
 				mot = mot1.lower()
+				mot = ''.join((c for c in unicodedata.normalize('NFD', mot) if unicodedata.category(c) != 'Mn'))
+				mot = re.sub('[^a-z0-9]', '', mot)
 				if mot not in count:
 					count[mot]=1
 				else:
@@ -135,7 +176,7 @@ def prof_refresh(request, code, question_id):
 				compte.append(temp)
 				temp=[]
 
-			data['compte'] = compte
+			data['reponses'] = compte
 
 
 			# temp.append('max'+str(max))
@@ -152,6 +193,29 @@ def prof_refresh(request, code, question_id):
 		#return JsonResponse({})
 
 	data['nb_lost'] = Lost.objects.filter(seance = seance).count()
+
+	##########################
+	#     graphe de losts    #
+	##########################
+	reponses = Lost.objects.filter(seance = seance)
+	NOMBRE = 20
+	tempsreponse = [0 for i in range(NOMBRE)]
+	tempsreponsex = [i for i in range(NOMBRE)]
+	if reponses:
+		max = timezone.now()
+		min = max - datetime.timedelta(0,60*5,0)
+		min = min - datetime.timedelta(minutes=0, seconds=min.second%15, microseconds=min.microsecond)
+		tt = datetime.timedelta(0,60*5,0).total_seconds()
+		dt = int(tt/NOMBRE)
+		tempsreponsex = [i*dt for i in range(NOMBRE)]
+		for r in reponses:
+			t = int(round(((r.date - min).total_seconds()/tt) * (NOMBRE-1)))
+			if t > 0 and t <= NOMBRE-1:
+				tempsreponse[t] = tempsreponse[t] + 1
+	data['lost_data'] = tempsreponse
+	data['lost_datax'] = tempsreponsex
+	data['ZZZ'] = min
+
 	return JsonResponse(data)
 
 
@@ -203,8 +267,11 @@ def etudiant_post(request):
 			reponse.save()
 		return JsonResponse({'success':1})
 	if  'lost' in request.POST:
-		seance = Seance.objects.filter(code = request.POST['code']).get()
 		etudiant = request.session['id_student']
+		seance = Seance.objects.filter(code = request.POST['code']).get()
+		t = timezone.now() - datetime.timedelta(0,60*5,0)
+		if Lost.objects.filter(seance = seance, id_etudiant = etudiant, date__gte = t):
+			return JsonResponse({'error':1})
 		lost = Lost(id_etudiant = etudiant, seance = seance)
 		lost.save()
 		return JsonResponse({'success':1})

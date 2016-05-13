@@ -31,7 +31,7 @@
 <div class="question-open bloc hidden">
   <!--<div class="titre">Question n°<span class="numero">0</span></div>-->
   <div class="question ouverte">
-    <form action="/etudiant_post" method="post">
+    <form action="/etudiant_post" method="post" id="formopen">
       {% csrf_token %}
       <input type="hidden" name="question_type" value="open"/>
       <input type="text" name="texte"/>

@@ -5,17 +5,22 @@
 
 {% block body %}
 
-<div class="jumbotron">
-  <div class="container">
-    <p style="text-align:center">Salle n° {{code}} </p>
 
-    <div class="compteur">0</div>
+<div class="container">
+  <div class="bloc">
 
-    <a href="{% url 'Quizz.views.qrcode' code=code %}" target="_blank">Afficher le QRCode</a>
+    <h2 id="salle">Salle n° <span>{{code}}</span></h2>
+
+    <!--<div class="compteur">0</div>-->
 
 
     <form method ="post" action={% url 'Quizz.views.prof' %}>
       {% csrf_token %}
+
+      <a href="{% url 'Quizz.views.qrcode' code=code %}" target="_blank" class="celprof qr">
+        <div id="qrcode"></div>
+        <p>Afficher le QRCode en plein écran</p>
+      </a>
 
       <button type ="submit" id="qcm" class="celprof" name="question_type" value ="qcm">
         <img alt="Nouvelle question QCM" src="{% static 'images/newqcm.svg' %}"/>
@@ -43,24 +48,35 @@
 </div>
 
 <div class="container">
-  <h1>De la communication à double sens en cours avec e-Quizz !</h1>
-  <div class="row">
-    <div style="text-align:center;">Nombre de réponses: <span id="nb_rep">0</span></div>
-  </div>
 
   <div class="row">
     <div class="col-sm-6">
-      <canvas id="qcmchart" width="400" height="400"></canvas>
+      <div class="bloc">
+        <h3>Réponses au QCM</h3>
+        <canvas id="qcmchart" width="400" height="300"></canvas>
+
+        <canvas id="openchart" width="400" height="300"></canvas>
+      </div>
     </div>
     <div class="col-sm-6">
-      <canvas id="qcmpiechart" width="400" height="400"></canvas>
+      <div class="bloc">
+        <h3>Nombre de réponses : <strong><span id="nb_rep">0</span></strong></h3>
+      </div>
 
+      <div class="bloc">
+        <h3>Temps de réponse</h3>
+        <canvas id="timechart" width="400" height="200"></canvas>
+      </div>
     </div>
+  </div>
 
+  <div class="bloc">
+    <h3>Personnes perdues</h3>
+    <div style="height:150px;">
+      <canvas id="lostchart" width="800" height="200"></canvas>
+    </div>
   </div>
-  <div class="row">
-    <canvas id="openchart"width="800" height="400">
-  </div>
+
 </div>
 
 {% endblock %}
@@ -68,24 +84,24 @@
 {% block scripts %}
 <script src="{% static 'js/chart.js' %}"></script>
 <script src="{% static 'wordcloud2/src/wordcloud2.js' %}"></script>
+<script src="{% static 'qrcode/qrcode.min.js' %}"></script>
 
 <script>
   window.page = "prof";
   window.code = {{code}};
   window.test = 0;
 
-  /*new QRCode(
+  new QRCode(
     document.getElementById("qrcode"),
     {
       text : "http://{{current_site.domain}}{% url 'Quizz.views.prof_refresh' code=code question_id=question_number %}",
       colorDark : "#000000",
-      colorLight : "#EEE",
+      colorLight : "#FFF",
     }
-  );*/
+  );
 
   window.mem_open_list = [];
   window.qcmchart = new Chart($("#qcmchart"), {
-
     type: 'bar',
     data: {
       labels: ["A", "B", "C", "D", "E", "F"],
@@ -93,42 +109,42 @@
         label: 'Nombre de votes',
         data: [0, 0, 0, 0, 0, 0],
         backgroundColor: [
-          "#666",
-          "#666",
-          "#666",
-          "#666",
-          "#666",
-          "#666",
+          "#666", "#666", "#666", "#666", "#666", "#666",
         ],
         hoverBackgroundColor: [
-          "#999",
-          "#999",
-          "#999",
-          "#999",
-          "#999",
-          "#999",
-          "#999",
+          "#999", "#999", "#999", "#999", "#999", "#999",
         ],
-        /*backgroundColor: [
-          "#aec7e8",
-          "#ffbb78",
-          "#98df8a",
-          "#ff9896",
-          "#c5b0d5",
-          "#c49c94",
-        ],
-        hoverBackgroundColor: [
-          "#1f77b4",
-          "#ff7f0e",
-          "#2ca02c",
-          "#d62728",
-          "#9467bd",
-          "#8c564b",
-        ]*/
       }]
     },
     options: {
       scales: { yAxes: [{ ticks: { beginAtZero:true }  }] },
+      responsive: true,
+    }
+  });
+
+  window.timechart = new Chart($("#timechart"), {
+    type: 'line',
+    data: {
+      labels: [0,1,2,3,4,5,6,7,8,9],
+      datasets: [{
+        label: 'Nombre de votes',
+        data: [0, 0, 0, 0, 0, 0],
+      }]
+    },
+  });
+
+  window.lostchart = new Chart($("#lostchart"), {
+    type: 'line',
+    data: {
+      labels: [0,1,2,3,4,5,6,7,8,9],
+      datasets: [{
+        label: 'Personnes perdues',
+        data: [0, 0, 0, 0, 0, 0],
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
     }
   });
 
@@ -170,9 +186,6 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
       	$("#qcmchart").addClass('hidden');
         $("#qcmpiechart").addClass('hidden');
         $("#openchart").addClass('hidden');
-
-      	window.test=42;
-      	console.log("yolo");
   	  }
       else if (res.error) {
         alert('Erreur : ' + res.error);
@@ -184,12 +197,20 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
         window.qcmchart.data.datasets[0].data = res.reponses;
         window.qcmchart.update();
         document.getElementById("nb_rep").innerHTML = res.nb_reponses;
+
+        window.timechart.data.datasets[0].data = res.tempsreponse;
+        window.timechart.data.labels = res.tempsreponsex;
+        window.timechart.update();
       }
       else if (res.question_type == "Open" && res.reponses != "undefined") {
+        window.timechart.data.datasets[0].data = res.tempsreponse;
+        window.timechart.data.labels = res.tempsreponsex;
+        window.timechart.update();
+
       	$("#openchart").removeClass('hidden');
       	$("#qcmchart").addClass('hidden');
         $("#qcmpiechart").addClass('hidden');
-        if (!(res.reponses.equals(window.mem_open_list))){
+        if (window.mem_open_list == "undefined" || !(res.reponses.equals(window.mem_open_list))){
           /*console.log("salut");
           console.log(window.mem_open_list);
           console.log(res.reponses);*/
@@ -208,6 +229,10 @@ Object.defineProperty(Array.prototype, "equals", {enumerable: false});
       if (res.nb_lost != 0){
       	$(".compteur").css("background-color", "red");
       }
+      window.lostchart.data.datasets[0].data = res.lost_data;
+      window.lostchart.data.labels = res.lost_datax;
+      window.lostchart.update();
+
     }).always(function() {
       setTimeout(window.refresh_prof, 2000);
     });

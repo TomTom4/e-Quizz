@@ -3,7 +3,6 @@ $(function() {
   $("#acces-etudiant").submit(function() {
     var code = $("#code").val();
     window.location.href = "etudiant/" + code;
-    return false;
   });
 
   if (window.page == "etudiant") {
@@ -57,15 +56,22 @@ $(function() {
       $("#warning_red").removeClass('hidden');
       //$("input[name = valeur_lost]").val($(this).attr('data-valeur'));
       $("#warning form").ajaxSubmit();
+
+      setTimeout(function() {
+        $(".warning_yellow").removeClass('hidden');
+        $("#warning_red").addClass('hidden');
+      }, 60*1000*5)
     });
 
 
-    $(".open-submit").click(function() {
+    $("#formopen").submit(function(e) {
+      e.preventDefault();
       $(".question-qcm").addClass('hidden');
       $(".question-open").addClass('hidden');
       $("#rien-en-cours").removeClass('hidden');
       //$("input[name=valeur]").val($(this).attr('data-valeur'));
       $(".question-open form").ajaxSubmit();
+      return null;
     });
 
   }
