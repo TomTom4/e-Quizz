@@ -21,9 +21,10 @@ $(function() {
           $("input[name=id]").val(res.id);
           $(".numero").text(res.numero);
 
-          $(".question-qcm").removeClass('hidden');
+
           $("#rien-en-cours").addClass('hidden');
           $(".question-open").addClass('hidden');
+          $(".question-qcm").removeClass('hidden');
         }
         //Expérimental par Thomas
         else if (res.question_type == "Open" && res.numero > window.question_numero) {
@@ -31,9 +32,10 @@ $(function() {
           $("input[name=id]").val(res.id);
           $(".numero").text(res.numero);
 
-          $(".question-open").removeClass('hidden');
+
           $(".question-qcm").addClass('hidden');
           $("#rien-en-cours").addClass('hidden');
+          $(".question-open").removeClass('hidden');
         }
 
       }).always(function() {
