@@ -129,10 +129,10 @@ body{
   background-image: url('/static/images/d.svg');
 }
 .question-qcm.bloc .reponse.e {
-  background-image: url('/static/images/d.svg');
+  background-image: url('/static/images/e.svg');
 }
 .question-qcm.bloc .reponse.f {
-  background-image: url('/static/images/d.svg');
+  background-image: url('/static/images/f.svg');
 }
 
 .question-qcm.bloc.hidden {

@@ -291,9 +291,9 @@ def download(request):
 	seance = Seance.objects.get(code=code)
 	questions = Question.objects.filter(seance=seance)
 	for q in questions:
-		writer.writerow(['Question n°'+q.numero, q.commentaire])
-		if q.type == "QCM":
-			writer.writerow(i for i in range(6))
+		writer.writerow(['Question n°'+str(q.numero), q.date, q.commentaire])
+		if q.question_type == "QCM":
+			writer.writerow([i+1 for i in range(6)])
 			compte = []
 			for ans in range(0,6):
 				compte.append(Reponse_QCM.objects.filter(question=q, valeur=ans).count())
