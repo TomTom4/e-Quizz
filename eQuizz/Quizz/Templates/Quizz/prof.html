@@ -32,10 +32,10 @@
         <p>Débuter une question nuage de mots</p>
       </button>
 
-      <button type ="submit" id="close" class="celprof"  name="question_type" value ="close">
+      <a href="{% url 'Quizz.views.download' %}" id="close" class="celprof">
         <img alt="Mettre fin à la session" src="{% static 'images/exit.svg' %}"/>
         <p>Terminer le cours et recevoir les données</p>
-      </button>
+      </a>
 
     </form>
 
