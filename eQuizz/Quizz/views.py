@@ -12,6 +12,7 @@ import re
 import unicodedata
 import datetime
 from django.utils import timezone
+import operator
 
 MAX_NUMBER_ANS = 4
 
@@ -298,6 +299,24 @@ def download(request):
 			for ans in range(0,6):
 				compte.append(Reponse_QCM.objects.filter(question=q, valeur=ans).count())
 			writer.writerow(compte)
+		if q.question_type == "Open":
+			answers=Reponse_OPEN.objects.filter(question=q)
+			count={}
+			mots=[]
+			for ans in answers:
+				mots.append(ans.text)
+			for mot in mots:
+				if mot not in count:
+					count[mot]=1
+				else:
+					count[mot]=count[mot]+1
+			sorted_ans = sorted(count.items(), key=operator.itemgetter(1))
+			row=[]
+			for item in sorted_ans:
+				row.append(str(item[1])+' '+str(item[0]))
+			#writer.writerow(mots)
+			#writer.writerow(count)
+			writer.writerow(row)
 
 	return response
 
